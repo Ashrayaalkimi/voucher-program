@@ -36,7 +36,9 @@ const OrderDetails = (props: Props) => {
             placeholder="Enter the discount code"
             className="block w-full p-3 pl-10 border-2 border-[#242424] bg-[#242424] outline-none text-[#ABABAB] text-sm font-light rounded-lg self-stretch gap-2 items-center"
           ></input>
-          <button className="absolute right-2.5 bottom-1 focus:ring-4 focus:outline-none rounded-lg text-sm px-4 py-2 font-medium text-[#ababab]">Apply</button>
+          <button className="absolute right-2.5 bottom-1 focus:bg-black focus:translate-x-0.5 focus:text-bold focus:text-white focus:outline-none rounded-lg text-sm px-4 py-2 font-medium text-[#ababab]">
+            Apply
+          </button>
         </div>
       </div>
 
@@ -62,12 +64,13 @@ const OrderDetails = (props: Props) => {
 
       <div className="flex justify-center">
         <Link href="/payment">
-          <button className="text-black block w-full self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl">
+          <button className="text-black block self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl">
             Proceed to payment Method
           </button>
         </Link>
       </div>
-      <p className="text-sm font-normal opacity-50">
+     
+      <p className="text-sm font-normal opacity-50 text-center">
         We protect your payment information using encryption to provide
         bank-level security.
       </p>

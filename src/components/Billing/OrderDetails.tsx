@@ -29,7 +29,7 @@ const OrderDetails = (props: Props) => {
         <h3 className="text-base font-medium">Discount Code</h3>
         <div className="relative flex">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Image src={Tag} alt="Tag" className="absolute" />
+            <Image src={Tag} alt="Tag" className=" w-4 h-4" />
           </div>
           <input
             type="text"

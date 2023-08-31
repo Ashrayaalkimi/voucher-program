@@ -5,7 +5,7 @@ type Props = {};
 
 const PricingPage = (props: Props) => {
   return (
-    <div className="flex flex-col items-center gap-10 py-12 lg:mt-24 xl:justify-center">
+    <div className="flex flex-col items-center gap-10 lg:gap-20 py-16 xl:justify-center">
       <div className="flex flex-col items-center gap-3 ">
         <h1 className="text-5xl font-bold leading-[52px]">Vouchers</h1>
         <p className="text-[#CACACA] text-sm font-light leading-6 text-center mx-3 lg:px-40 xl:px-72 2xl:px-[490px]">

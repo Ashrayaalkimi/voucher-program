@@ -61,8 +61,8 @@ const OrderDetails = (props: Props) => {
       </div>
 
       <div className="flex justify-center">
-        <Link href="">
-          <button className="text-black w-full cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl">
+        <Link href="/payment">
+          <button className="text-black block w-full self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl">
             Proceed to payment Method
           </button>
         </Link>

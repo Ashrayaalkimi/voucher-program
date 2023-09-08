@@ -28,7 +28,6 @@ export default function ProviderWeb3Modal({
   return (
     <>
       <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
-
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );

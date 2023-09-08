@@ -7,16 +7,30 @@ import Paypal from "../../../public/PayPal.svg";
 import { Web3Button } from "@web3modal/react";
 import ProviderWeb3Modal from "@/app/ProviderWeb3Modal";
 
-type Props = {};
+type Props = {
+  selectedPaymentMethod: string;
+  setSelectedPaymentMethod: (method: string) => void;
+};
 
-const PaymentMethod = (props: Props) => {
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("creditCard");
+const PaymentMethod = ({
+  selectedPaymentMethod,
+  setSelectedPaymentMethod,
+}: Props) => {
+  // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [isCreditCardSelected, setIsCreditCardSelected] = useState(false);
 
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSelectedPaymentMethod(event.target.value);
+    const newMethod = event.target.value;
+    setSelectedPaymentMethod(newMethod);
+
+    // Set the flag when Credit Card is selected
+    if (newMethod === "creditCard") {
+      setIsCreditCardSelected(true);
+    } else {
+      setIsCreditCardSelected(false);
+    }
   };
 
   return (
@@ -39,6 +53,14 @@ const PaymentMethod = (props: Props) => {
               <Image src={Cardicons} alt="Card Icons" />
             </div>
           </label>
+
+          {selectedPaymentMethod === "creditCard" && (
+            <p className="text-xs font-normal opacity-50">
+              You will be redirected to Stripe website to complete your order
+              securely. Please do not refresh until the transaction is complete.
+            </p>
+          )}
+
           <label htmlFor="paypal" className="flex cursor-pointer">
             <input
               type="radio"
@@ -54,6 +76,14 @@ const PaymentMethod = (props: Props) => {
               <Image src={Paypal} alt="Paypal Icons" />
             </div>
           </label>
+
+          {selectedPaymentMethod === "paypal" && (
+            <p className="text-xs font-normal opacity-50">
+              You will be redirected to PayPal website to complete your order
+              securely. Please do not refresh until the transaction is complete.
+            </p>
+          )}
+
           <label htmlFor="metamask" className="flex cursor-pointer">
             <input
               type="radio"

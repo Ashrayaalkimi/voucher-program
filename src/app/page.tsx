@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main className="min-h-screen mx-4">
+    <main className="min-h-screen">
       <PricingPage/>
     </main>
   )

@@ -1,14 +1,16 @@
-import SuccessPage from '@/components/Success/SuccessPage'
-import React from 'react'
+import BackToHome from "@/common/BackToHome";
+import SuccessPage from "@/components/Success/SuccessPage";
+import Link from "next/link";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Success = (props: Props) => {
   return (
     <div>
-        <SuccessPage/>
+      <SuccessPage />
     </div>
-  )
-}
+  );
+};
 
-export default Success
+export default Success;

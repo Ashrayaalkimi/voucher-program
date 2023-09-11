@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import BillingEmail from "./BillingEmail";
 import OrderDetails from "./OrderDetails";
 import PaymentMethod from "../SelectPayment/PaymentMethod";
-
+import CustomAlertBox from "@/common/CustomAlert";
 
 const BillingDetails = () => {
   const [emailId, setEmailId] = useState("");
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("creditCard");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState("");
   const [totalPrice, setTotalPrice] = useState(0);
-
+  // const [emailEntered, setEmailEntered] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false); 
   // const handleEmailChange = (email: string) => {
   //   setEmailId(email);
   //   console.log("Email received in parent component:", email);
@@ -20,6 +22,13 @@ const BillingDetails = () => {
   // };
 
   const handlePayment = async () => {
+    // Check if email is entered
+    // if (!emailEntered) {
+    //   // setShowAlert(true); 
+    //   alert("You must enter an email address to proceed with payment.");
+    //   return; // Prevent further execution
+    // }
+
     // Check if credit/debit card is selected
     if (selectedPaymentMethod === "creditCard") {
       try {
@@ -33,13 +42,13 @@ const BillingDetails = () => {
             },
             body: JSON.stringify({
               name: "Name",
-              amount: totalPrice, 
+              amount: totalPrice,
               currency: "inr",
               quantity: 1,
               mode: "payment",
               success_url:
-                "https://voucher-project.netlify.app/payment-success", 
-              cancel_url: "https://voucher-project.netlify.app/payment-failure", 
+                "https://voucher-project.netlify.app/payment-success",
+              cancel_url: "https://voucher-project.netlify.app/payment-failure",
               email_id: emailId,
             }),
           }
@@ -50,7 +59,6 @@ const BillingDetails = () => {
 
         const sessionData = await response.json();
         window.location.href = sessionData.url;
-     
       } catch (error) {
         console.error("Error processing payment:", error);
       }
@@ -61,9 +69,9 @@ const BillingDetails = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 justify-center lg:pt-20 p-6">
       <div className="flex flex-col gap-12">
-        <BillingEmail 
-        setEmailId={setEmailId} 
-        // onEmailChange={handleEmailChange} 
+        <BillingEmail
+          setEmailId={setEmailId}
+          // onEmailEnter={() => setEmailEntered(true)}
         />
         <PaymentMethod
           selectedPaymentMethod={selectedPaymentMethod}
@@ -72,7 +80,7 @@ const BillingDetails = () => {
       </div>
 
       <div className="flex flex-col gap-6 max-w-lg">
-        <OrderDetails setTotalPrice={setTotalPrice}/>
+        <OrderDetails setTotalPrice={setTotalPrice} />
         <div className="flex flex-col gap-4 justify-center">
           <button
             onClick={handlePayment}
@@ -86,6 +94,13 @@ const BillingDetails = () => {
           </p>
         </div>
       </div>
+
+      {/* {showAlert && (
+        <CustomAlertBox
+          message="You must enter an email address to proceed with payment."
+          onClose={() => setShowAlert(false)} // Close the alert box
+        />
+      )} */}
     </div>
   );
 };

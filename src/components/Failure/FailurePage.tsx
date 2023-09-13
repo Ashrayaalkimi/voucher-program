@@ -15,9 +15,9 @@ const FailurePage = (props: Props) => {
         <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-72">
           error message
         </p>
-        <Link href="/payment">
+        <Link href="/">
           <button className="text-black block self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl">
-            Back to payment
+            Back to Home
           </button>
         </Link>
       </div>

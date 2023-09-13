@@ -5,13 +5,11 @@ import * as Yup from "yup";
 
 type Props = {
   // onEmailChange:(email:string) => void;
-  setEmailId: (email:string) => void;
+  setEmailId: (email: string) => void;
   // onEmailEnter: () => void;
 };
 
 const BillingEmail = ({ setEmailId }: Props) => {
-  // const [email, setEmail] = useState("");
-  // Define the validation schema using Yup
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -28,8 +26,6 @@ const BillingEmail = ({ setEmailId }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      // setEmail(values.email);
-      // console.log(values);
       setEmailId(values.email);
       // onEmailEnter();
       // onEmailChange(values.email); // Pass email to parent component
@@ -89,18 +85,18 @@ const BillingEmail = ({ setEmailId }: Props) => {
             // onBlur={handleEmailValidation} // Trigger validation on blur
             // onChange={handleInputChange} // Trigger validation on change
           />
-           <button
-           onClick={handleValidateClick}
+          <button
+            onClick={handleValidateClick}
             className="absolute right-2.5 bottom-1 focus:bg-black focus:translate-x-0.5 focus:text-bold focus:text-white focus:outline-none rounded-lg text-sm px-4 py-2 font-medium text-[#ababab]"
           >
             Validate
           </button>
         </div>
-        {isEmailValid && (
-          <h6 className="text-sm font-normal opacity-50">
-            You will get a confirmation code on your email.
-          </h6>
-        )}
+
+        <h6 className="text-sm font-normal opacity-50">
+          You will get a confirmation code on your email.
+        </h6>
+
         {formik.touched.email && formik.errors.email && (
           <div className="text-red-500 text-sm">{formik.errors.email}</div>
         )}

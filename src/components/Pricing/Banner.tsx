@@ -25,12 +25,20 @@ const Banner = (props: Props) => {
       </p>
       <div
         className={`flex gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110 ${
-          copied ? "bg-green-700" : ""
+          copied ? "bg-green-800" : ""
         }`}
         onClick={copyToClipboard}
       >
-        <h4>{copied ? "Copied!" : "ALERT10"}</h4>
-        <Image src={Copy} alt="Copy icon" />
+        <h4 className="text-sm font-medium">
+          {copied ? (
+            "Copied!"
+          ) : (
+            <div className="flex gap-1">
+              <p>ALERT10</p>
+              <Image src={Copy} alt="Copy icon" />
+            </div>
+          )}
+        </h4>
       </div>
     </div>
   );

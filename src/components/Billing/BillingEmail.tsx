@@ -63,7 +63,7 @@ const BillingEmail = ({ setEmailId }: Props) => {
   // setEmailId(email);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         <h3 className="text-2xl font-medium">Billing Details</h3>
         <h4 className="text-base font-medium">Email Address</h4>
         <div
@@ -93,7 +93,7 @@ const BillingEmail = ({ setEmailId }: Props) => {
           </button>
         </div>
 
-        <h6 className="text-sm font-normal opacity-50">
+        <h6 className="text-xs font-normal opacity-50">
           You will get a confirmation code on your email.
         </h6>
 

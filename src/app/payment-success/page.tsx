@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import SuccessPage from "@/components/Success/SuccessPage";
 
-type Props = {
-  session_id: string; // Pass session_id as a prop
-  emailId: string; // Pass emailId as a prop
-};
 
-const Success = ({ session_id, emailId }: Props) => {
+const Success = () => {
+  const[session_id,setSessionId] = useState("");
+  const[emailId,setEmailId] = useState("");
   return (
     <div>
       <SuccessPage session_id={session_id} emailId={emailId} />

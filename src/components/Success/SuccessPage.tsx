@@ -5,10 +5,12 @@ import Tick from "../../../public/tick.svg";
 import Copy from "../../../public/copyicon.svg";
 import QR from "../../../public/qrcode.svg";
 import Link from "next/link";
+
 type SuccessPageProps = {
   session_id: string; // Pass session_id as a prop
   emailId: string; // Pass emailId as a prop
 };
+
 const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
   const [paymentIntentId, setPaymentIntentId] = useState("");
   useEffect(() => {

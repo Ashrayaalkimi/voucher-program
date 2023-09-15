@@ -43,7 +43,8 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
     if (session_id) {
       fetchPaymentIntentId();
     }
-  }, [session_id]);
+  }, []);
+
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#131313] rounded-3xl lg:mt-40 p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">

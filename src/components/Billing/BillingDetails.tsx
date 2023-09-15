@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import BillingEmail from "./BillingEmail";
-import OrderDetails from "./OrderDetails";
 import PaymentMethod from "../SelectPayment/PaymentMethod";
-import CustomAlertBox from "@/common/CustomAlert";
 import Email from "./Email";
 import Neworderdetails from "./Neworderdetails";
 
@@ -13,13 +10,15 @@ const BillingDetails = () => {
     useState("creditCard");
   const [totalPrice, setTotalPrice] = useState(0);
   const [paymentError, setPaymentError] = useState("");
-const[emailError,setEmailError] =useState("")
+  const [emailError, setEmailError] = useState("");
+  const [session_id, setSessionId] = useState(""); 
+
   const handlePayment = async () => {
     if (totalPrice === 0) {
       setPaymentError("You cannot pay zero money");
       return; // Don't proceed with payment if the total price is zero
     }
-    if(!emailId){
+    if (!emailId) {
       setEmailError("Enter your email to proceed with payment");
     }
     if (selectedPaymentMethod === "creditCard") {
@@ -49,6 +48,8 @@ const[emailError,setEmailError] =useState("")
         }
 
         const sessionData = await response.json();
+        setSessionId(sessionData.session_id); 
+        console.log("sessioid stored is - ",sessionData.session_id);
         window.location.href = sessionData.url;
       } catch (error) {
         console.error("Error processing payment:", error);
@@ -68,14 +69,12 @@ const[emailError,setEmailError] =useState("")
       </div>
       <div className="flex flex-col gap-6 max-w-lg">
         {/* <OrderDetails setTotalPrice={setTotalPrice} /> */}
-        <Neworderdetails setTotalPrice={setTotalPrice}/>
+        <Neworderdetails setTotalPrice={setTotalPrice} />
         <div className="flex flex-col gap-4 justify-center">
           {paymentError && (
             <p className="text-red-500 text-sm">{paymentError}</p>
           )}
-          {emailError && (
-            <p className="text-red-500 text-sm">{emailError}</p>
-          )}
+          {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
           <button
             onClick={handlePayment}
             className="text-black w-full block self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl"

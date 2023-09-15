@@ -1,41 +1,47 @@
+"use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Tick from "../../../public/tick.svg";
 import Copy from "../../../public/copyicon.svg";
 import QR from "../../../public/qrcode.svg";
 import Link from "next/link";
-type Props = {};
-
-const SuccessPage = (props: Props) => {
-  const [transactionId, setTransactionId] = useState("");
-  // const [voucherCode, setVoucherCode] = useState("");
-  // const [email, setEmail] = useState("");
-
+type SuccessPageProps = {
+  session_id: string; // Pass session_id as a prop
+  emailId: string; // Pass emailId as a prop
+};
+const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
+  const [paymentIntentId, setPaymentIntentId] = useState("");
   useEffect(() => {
-    // Fetch the transaction id using the session_id from the URL
-    const queryParams = new URLSearchParams(window.location.search);
-    const sessionId = queryParams.get("session_id");
-
-    if (sessionId) {
-      // Fetch transaction id using the session_id
-      fetch(
-        `https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/?session_id=${sessionId}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch transaction id");
+    // Make an API call to fetch payment_intent_id using session_id
+    const fetchPaymentIntentId = async () => {
+      try {
+        const response = await fetch(
+          "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              session_id: session_id,
+            }),
           }
-          return response.json();
-        })
-        .then((data) => {
-          setTransactionId(data.payment_intent_id);
-        })
-        .catch((error) => {
-          console.error("Error fetching transaction id:", error);
-        });
-    }
-  }, []);
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch payment_intent_id");
+        }
 
+        const data = await response.json();
+        setPaymentIntentId(data.payment_intent_id);
+      } catch (error) {
+        console.error("Error fetching payment_intent_id:", error);
+      }
+    };
+
+    if (session_id) {
+      fetchPaymentIntentId();
+    }
+  }, [session_id]);
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#131313] rounded-3xl lg:mt-40 p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
@@ -43,9 +49,9 @@ const SuccessPage = (props: Props) => {
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id: <span className="text-white">{transactionId}</span>.We
-            have also sent the voucher code to your email
-            <span className="text-white font-light"> name@gmail.com</span>
+            Transaction id: <span className="text-white">{paymentIntentId}</span>.We have
+            also sent the voucher code to your email
+            <span className="text-white font-light"> {emailId}</span>
           </p>
           <div className="flex gap-2">
             <h4>Code:</h4>

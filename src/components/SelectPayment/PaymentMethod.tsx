@@ -49,7 +49,7 @@ const PaymentMethod = ({
               onChange={handlePaymentMethodChange}
             />
             <div className="flex justify-between w-full">
-              <h6>Credit Card</h6>
+              <h6>Credit / Debit Card</h6>
               <Image src={Cardicons} alt="Card Icons" />
             </div>
           </label>

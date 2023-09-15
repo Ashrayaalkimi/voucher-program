@@ -4,35 +4,26 @@ import BillingEmail from "./BillingEmail";
 import OrderDetails from "./OrderDetails";
 import PaymentMethod from "../SelectPayment/PaymentMethod";
 import CustomAlertBox from "@/common/CustomAlert";
+import Email from "./Email";
+import Neworderdetails from "./Neworderdetails";
 
 const BillingDetails = () => {
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("");
+    useState("creditCard");
   const [totalPrice, setTotalPrice] = useState(0);
-  // const [emailEntered, setEmailEntered] = useState(false);
-  // const [showAlert, setShowAlert] = useState(false); 
-  // const handleEmailChange = (email: string) => {
-  //   setEmailId(email);
-  //   console.log("Email received in parent component:", email);
-  // };
-  // const setEmail = (emailValue : any) => {
-  //   setEmailId(emailValue);
-  //   console.log("Email received in parent component:", emailValue);
-  // };
-
+  const [paymentError, setPaymentError] = useState("");
+const[emailError,setEmailError] =useState("")
   const handlePayment = async () => {
-    // Check if email is entered
-    // if (!emailEntered) {
-    //   // setShowAlert(true); 
-    //   alert("You must enter an email address to proceed with payment.");
-    //   return; // Prevent further execution
-    // }
-
-    // Check if credit/debit card is selected
+    if (totalPrice === 0) {
+      setPaymentError("You cannot pay zero money");
+      return; // Don't proceed with payment if the total price is zero
+    }
+    if(!emailId){
+      setEmailError("Enter your email to proceed with payment");
+    }
     if (selectedPaymentMethod === "creditCard") {
       try {
-        // Fetching Stripe Checkout Session URL from backend
         const response = await fetch(
           "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/product-checkout-session/",
           {
@@ -69,38 +60,35 @@ const BillingDetails = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 justify-center lg:pt-20 p-6">
       <div className="flex flex-col gap-12">
-        <BillingEmail
-          setEmailId={setEmailId}
-          // onEmailEnter={() => setEmailEntered(true)}
-        />
+        <Email setEmailId={setEmailId} />
         <PaymentMethod
           selectedPaymentMethod={selectedPaymentMethod}
           setSelectedPaymentMethod={setSelectedPaymentMethod}
         />
       </div>
-
       <div className="flex flex-col gap-6 max-w-lg">
-        <OrderDetails setTotalPrice={setTotalPrice} />
+        {/* <OrderDetails setTotalPrice={setTotalPrice} /> */}
+        <Neworderdetails setTotalPrice={setTotalPrice}/>
         <div className="flex flex-col gap-4 justify-center">
+          {paymentError && (
+            <p className="text-red-500 text-sm">{paymentError}</p>
+          )}
+          {emailError && (
+            <p className="text-red-500 text-sm">{emailError}</p>
+          )}
           <button
             onClick={handlePayment}
             className="text-black w-full block self-stretch cursor-pointer text-sm lg:text-base font-medium py-3 px-16 lg:px-32 bg-white rounded-xl"
           >
-            Pay {totalPrice}
+            Proceed to payment
           </button>
+
           <p className="text-sm font-normal opacity-50 text-center">
             We protect your payment information using encryption to provide
             bank-level security.
           </p>
         </div>
       </div>
-
-      {/* {showAlert && (
-        <CustomAlertBox
-          message="You must enter an email address to proceed with payment."
-          onClose={() => setShowAlert(false)} // Close the alert box
-        />
-      )} */}
     </div>
   );
 };

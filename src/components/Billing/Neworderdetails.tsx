@@ -6,8 +6,9 @@ import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
 
 type Props = {
-  setTotalPrice: (price: number) => void;
+    setTotalPrice: (price: number) => void;
 };
+
 interface ProductDetail {
   id: number;
   name: string;
@@ -20,17 +21,8 @@ interface ProductDetail {
   currency: string;
   status: boolean;
 }
-interface AffiliateCode {
-  id: number;
-  affiliateCode: string;
-  affiliateRemarks: string;
-  validFrom: string;
-  validTo: string;
-  discount: number | null;
-  products: ProductDetail[];
-}
 
-const OrderDetails = ({ setTotalPrice }: Props) => {
+const Neworderdetails = ({setTotalPrice}: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const getParams = searchParams.get("productId");
@@ -40,9 +32,14 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [couponCode, setCouponCode] = useState<string>("");
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [couponAppliedMessage, setCouponAppliedMessage] = useState<string | null>(
+    null
+  );
+
 
   useEffect(() => {
     if (getParams) {
@@ -58,6 +55,8 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
         })
         .then((data) => {
           setProductDetail(data);
+          console.log("ProductDetail data",data);
+          setTotal(data.basePrice);
           setLoading(false);
           setError(null);
         })
@@ -68,7 +67,23 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
     }
   }, [getParams]);
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!productDetail) {
+
+    return <p>No product details found.</p>;
+  }
+
   const handleApplyCoupon = () => {
+    if (!couponCode) {
+      setError("Please enter a coupon code");
+      return;
+    }
+  
+    setError(null);
+  
     fetch(
       `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/affiliate/get/${couponCode}/${getParams}`
     )
@@ -79,31 +94,33 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
         return response.json();
       })
       .then((data) => {
-        const coupon = data.affiliateCode;
-        console.log("discount data", data);
-        console.log("coupon",coupon)
-        if (coupon !== null) {
-          setAppliedDiscount(data.products.discountedPrice);
-          console.log("applieddiscount",appliedDiscount)
-          setTotal(data.products.totalPrice || 0);
-          setTotalPrice(data.products.totalPrice || 0);
-          setError(null);
+        // Check if the product in the response matches the getParams
+        if (
+          data.products &&
+          data.products.length > 0 &&
+          data.products[0].id === Number(getParams)
+        ) {
+          // Update the appliedDiscount and total based on the response
+          setAppliedDiscount(data.products[0].discountedPrice);
+          setTotal(data.products[0].totalPrice);
+          setCouponAppliedMessage(`Hurray!! ${couponCode} got applied!`);
+          console.log("ProductDetail basePrice",productDetail.basePrice);
+
         } else {
-          setError("Coupon code doesn't exist! Sorry");
+          setError("This coupon code cannot be applied to this product");
+          setAppliedDiscount(0);
+          setTotal(productDetail.basePrice);
         }
       })
       .catch((error) => {
-        setError("Error fetching coupon codes");
+        setError("Coupon code doesn't exist! Sorry");
+        setAppliedDiscount(0);
+        setTotal(productDetail.basePrice);
       });
   };
+  
+  setTotalPrice(total);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!productDetail) {
-    return <p>No product details found.</p>;
-  }
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">
@@ -121,9 +138,6 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
         <p className="text-sm font-light">
           1 GB Bandwidth, Subdomain, 1000 Users
         </p>
-        {/* <p className="text-xs font-light cursor-pointer text-[#FF6625]">
-          Remove
-        </p> */}
       </div>
 
       <div className="h-0.5 bg-[#313131]"></div>
@@ -162,11 +176,13 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
         </div>
         <div className="flex justify-between">
           <h4 className="text-base font-normal">Discount</h4>
+         
           <h4 className="text-base font-semibold">
             -{appliedDiscount} {productDetail.currency} /mo
-            {/* -{(productDetail.basePrice * appliedDiscount) / 100} {productDetail.currency} /mo */}
           </h4>
         </div>
+        {couponAppliedMessage && <h5 className="text-xs text-green-400 font-light">{couponAppliedMessage}</h5>}
+        {/* {couponCode && <h5 className="text-xs text-green-400 font-light">Hurray!! {couponCode} got applied!</h5>} */}
       </div>
 
       <div className="h-0.5 bg-[#313131]"></div>
@@ -175,11 +191,10 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
         <h4 className="text-base font-medium">Total</h4>
         <h4>
           {total.toFixed(2)} {productDetail.currency}/mo
-          {/* {discountedPrice.toFixed(2)} {productDetail.currency}/mo */}
         </h4>
       </div>
     </div>
   );
 };
 
-export default OrderDetails;
+export default Neworderdetails;

@@ -81,10 +81,10 @@ const OrderDetails = ({ setTotalPrice }: Props) => {
       .then((data) => {
         const coupon = data.affiliateCode;
         console.log("discount data", data);
-        console.log("coupon",coupon)
+        console.log("coupon", coupon);
         if (coupon !== null) {
           setAppliedDiscount(data.products.discountedPrice);
-          console.log("applieddiscount",appliedDiscount)
+          console.log("applieddiscount", appliedDiscount);
           setTotal(data.products.totalPrice || 0);
           setTotalPrice(data.products.totalPrice || 0);
           setError(null);

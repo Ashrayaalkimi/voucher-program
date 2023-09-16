@@ -94,6 +94,7 @@ const Neworderdetails = ({setTotalPrice}: Props) => {
         return response.json();
       })
       .then((data) => {
+        console.log("coupon",data);
         // Check if the product in the response matches the getParams
         if (
           data.products &&
@@ -103,7 +104,7 @@ const Neworderdetails = ({setTotalPrice}: Props) => {
           // Update the appliedDiscount and total based on the response
           setAppliedDiscount(data.products[0].discountedPrice);
           setTotal(data.products[0].totalPrice);
-          setCouponAppliedMessage(`Hurray!! ${couponCode} got applied!`);
+          setCouponAppliedMessage(`Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`);
           console.log("ProductDetail basePrice",productDetail.basePrice);
 
         } else {

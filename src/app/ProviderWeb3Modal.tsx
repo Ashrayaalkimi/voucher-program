@@ -6,9 +6,9 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { ReactNode } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon, bsc } from "wagmi/chains";
+import { arbitrum, mainnet } from "wagmi/chains";
 
-const chains = [arbitrum, mainnet, polygon, bsc];
+const chains = [arbitrum, mainnet];
 const projectId = "94c5ab0f5db0bd046ff6ce449e1fbc63";
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);

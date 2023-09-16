@@ -43,7 +43,7 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
     if (session_id) {
       fetchPaymentIntentId();
     }
-  }, []);
+  }, [session_id]);
 
   return (
     <>

@@ -10,11 +10,13 @@ import ProviderWeb3Modal from "@/app/ProviderWeb3Modal";
 type Props = {
   selectedPaymentMethod: string;
   setSelectedPaymentMethod: (method: string) => void;
+  setUserAddress: (address: string) => void; //senders wallet address
 };
 
 const PaymentMethod = ({
   selectedPaymentMethod,
   setSelectedPaymentMethod,
+  setUserAddress,
 }: Props) => {
   // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [isCreditCardSelected, setIsCreditCardSelected] = useState(false);
@@ -30,6 +32,20 @@ const PaymentMethod = ({
       setIsCreditCardSelected(true);
     } else {
       setIsCreditCardSelected(false);
+    }
+  };
+
+  const handleConnectWallet = async () => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const userAddress = accounts[0]; // Assuming the first account
+      setUserAddress(userAddress);
+      console.log("Senders wllet address : ", userAddress);
+      setSelectedPaymentMethod("metamask");
+    } catch (error) {
+      console.error("Error connecting wallet:", error);
     }
   };
 
@@ -99,7 +115,13 @@ const PaymentMethod = ({
               <Image src={Metamask} alt="Metamask Icons" />
             </div>
           </label>
-          {selectedPaymentMethod === "metamask" && <Web3Button></Web3Button>}
+          {selectedPaymentMethod === "metamask" && (
+            <>
+              <button onClick={handleConnectWallet}>
+                <Web3Button></Web3Button>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </ProviderWeb3Modal>

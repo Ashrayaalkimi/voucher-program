@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import PlanCard from "./PlanCard";
 import Banner from "./Banner";
+import ShimmerPlanCards from "./ShimmerPlanCards";
 
 type Props = {};
 interface Product {
@@ -34,6 +35,7 @@ const PricingPage = (props: Props) => {
           </p>
         </div>
         <div>
+          {/* <ShimmerPlanCards/> */}
           <PlanCard onSelectPlan={handleSelectPlan} />
         </div>
       </div>{" "}

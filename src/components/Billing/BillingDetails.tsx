@@ -15,7 +15,16 @@ const BillingDetails = () => {
   // const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
-  const web3 = new Web3(window.ethereum);
+  // const web3 = new Web3(window.ethereum);
+  const web3 = window.ethereum ? new Web3(window.ethereum) : null;
+
+  if (!web3) {
+    console.error(
+      "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
+    );
+    return null;
+  }
+
   const fetchExchangeRate = async () => {
     try {
       const response = await fetch(

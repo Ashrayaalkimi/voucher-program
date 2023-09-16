@@ -22,7 +22,7 @@ interface ProductDetail {
   status: boolean;
 }
 
-const Neworderdetails = ({setTotalPrice}: Props) => {
+const OrderDetails = ({setTotalPrice}: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const getParams = searchParams.get("productId");
@@ -198,4 +198,4 @@ const Neworderdetails = ({setTotalPrice}: Props) => {
   );
 };
 
-export default Neworderdetails;
+export default OrderDetails;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PaymentMethod from "../SelectPayment/PaymentMethod";
 import Email from "./Email";
 import Web3 from "web3";
@@ -15,8 +15,22 @@ const BillingDetails = () => {
   const [emailError, setEmailError] = useState("");
   // const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
+  const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
 
-  const web3 = new Web3(window.ethereum);
+  useEffect(() => {
+    // Check if window is defined (client-side)
+    if (typeof window !== "undefined") {
+      const ethereum = (window as any).ethereum; // Use any type to access ethereum
+      if (ethereum) {
+        const web3Instance = new Web3(ethereum);
+        setWeb3(web3Instance);
+      } else {
+        console.error("MetaMask or similar Ethereum wallet is not available.");
+      }
+    }
+  }, []); 
+
+  // const web3 = new Web3(window.ethereum);
   // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
 
   if (!web3) {

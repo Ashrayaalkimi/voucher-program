@@ -67,6 +67,10 @@ const OrderDetails = ({setTotalPrice}: Props) => {
     }
   }, [getParams]);
 
+  useEffect(() => {
+    setTotalPrice(total);
+  }, [total, setTotalPrice]);
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -119,6 +123,8 @@ const OrderDetails = ({setTotalPrice}: Props) => {
         setTotal(productDetail.basePrice);
       });
   };
+  
+  // setTotalPrice(total);
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">

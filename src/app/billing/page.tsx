@@ -1,4 +1,5 @@
-import BillingDetails from "@/components/Billing/BillingDetails";
+// import BillingDetails from "@/components/Billing/BillingDetails";
+import BillingDetails from "../../components/Billing/BillingDetails"
 import React from "react";
 
 type Props = {};

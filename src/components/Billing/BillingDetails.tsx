@@ -6,6 +6,7 @@ import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
 
 const BillingDetails = () => {
+  
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState("creditCard");

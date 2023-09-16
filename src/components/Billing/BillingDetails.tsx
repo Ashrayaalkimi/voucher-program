@@ -12,7 +12,7 @@ const BillingDetails = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [paymentError, setPaymentError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [session_id, setSessionId] = useState("");
+  // const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
   const web3 = new Web3(window.ethereum);
@@ -71,10 +71,10 @@ const BillingDetails = () => {
           throw new Error("Failed to fetch Stripe Checkout Session URL");
         }
 
-        const sessionData = await response.json();
-        setSessionId(sessionData.session_id);
-        console.log("sessioid stored is - ", sessionData.session_id);
-        window.location.href = sessionData.url;
+        // const sessionData = await response.json();
+        // setSessionId(sessionData.session_id);
+        // console.log("sessioid stored is - ", sessionData.session_id);
+        // window.location.href = sessionData.url;
       } catch (error) {
         console.error("Error processing payment:", error);
       }

@@ -6,7 +6,7 @@ import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
 
 const BillingDetails = () => {
-  
+
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState("creditCard");
@@ -16,8 +16,8 @@ const BillingDetails = () => {
   // const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
-  // const web3 = new Web3(window.ethereum);
-  const web3 = window.ethereum ? new Web3(window.ethereum) : null;
+  const web3 = new Web3(window.ethereum);
+  // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
 
   if (!web3) {
     console.error(

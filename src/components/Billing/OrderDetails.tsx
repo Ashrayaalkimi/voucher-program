@@ -119,9 +119,6 @@ const OrderDetails = ({setTotalPrice}: Props) => {
         setTotal(productDetail.basePrice);
       });
   };
-  
-  setTotalPrice(total);
-
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">

@@ -34,10 +34,10 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
         console.error("Error fetching data:", error);
       });
   }, []);
-  const handleViewPlanbyId = (id:any) => {
+  const handleViewPlanbyId = (id: any) => {
     const url = `/billing?productId=${id}`;
     router.push(url);
-  }
+  };
 
   return (
     <div className="flex flex-col mx-4 gap-10 lg:grid lg:grid-flow-row lg:grid-cols-3 lg:gap-12 cursor-pointer">
@@ -48,7 +48,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
         >
           <div className="bg-[#313131] rounded-[10px] group group-hover:bg-gradient-to-r group-hover:from-[#FADD62] group-hover:to-[#ff7337]">
             <button className="py-1 px-4 bg-gradient-to-r font-medium from-[#FADD62] to-[#FF7337] text-transparent bg-clip-text group-hover:text-black">
-              {product.noOfAlerts}  alerts
+              {product.noOfAlerts} alerts
             </button>
           </div>
 
@@ -61,15 +61,12 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
             <li>1000 Users</li>
             <li>Marketing Plan</li>
           </ul>
-          {/* <Link href="/billing"> */}
-            <button 
-            // onClick={() => onSelectPlan(product)} 
-            onClick={()=>handleViewPlanbyId(product.id)}
-            className="text-black w-full text-base font-medium py-3 px-16 lg:px-16 bg-white rounded-xl">
-              Proceed to payment
-            </button>
-          {/* </Link> */}
-        
+          <button
+            onClick={() => handleViewPlanbyId(product.id)}
+            className="text-black w-full text-base font-medium py-3 px-16 lg:px-16 bg-white rounded-xl"
+          >
+            Proceed to payment
+          </button>
         </div>
       ))}
     </div>

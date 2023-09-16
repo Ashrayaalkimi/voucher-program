@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import PaymentMethod from "../SelectPayment/PaymentMethod";
 import Email from "./Email";
-import Web3 from 'web3';
-import Neworderdetails from "./Neworderdetails";
+import Web3 from "web3";
+import OrderDetails from "./OrderDetails";
 
 const BillingDetails = () => {
   const [emailId, setEmailId] = useState("");
@@ -14,7 +14,7 @@ const BillingDetails = () => {
   const [emailError, setEmailError] = useState("");
   const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
-  
+
   const web3 = new Web3(window.ethereum);
   const fetchExchangeRate = async () => {
     try {
@@ -38,7 +38,7 @@ const BillingDetails = () => {
   const handlePayment = async () => {
     if (totalPrice === 0) {
       setPaymentError("You cannot pay zero money");
-      return; // Don't proceed with payment if the total price is zero
+      return;
     }
 
     if (!emailId) {
@@ -81,10 +81,10 @@ const BillingDetails = () => {
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRate = await fetchExchangeRate();
-        console.log("Exchange Rate", exchangeRate);
+        // console.log("Exchange Rate", exchangeRate);
         const amountInETH = totalPrice / exchangeRate;
-        console.log("TotalPrice", totalPrice);
-        console.log("Amount in etherum", amountInETH);
+        // console.log("TotalPrice", totalPrice);
+        // console.log("Amount in etherum", amountInETH);
         const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
         const transactionObject = {
           from: userAddress,
@@ -114,7 +114,7 @@ const BillingDetails = () => {
         />
       </div>
       <div className="flex flex-col gap-6 max-w-lg">
-        <Neworderdetails setTotalPrice={setTotalPrice} />
+        <OrderDetails setTotalPrice={setTotalPrice} />
         <div className="flex flex-col gap-4 justify-center">
           {paymentError && (
             <p className="text-red-500 text-sm">{paymentError}</p>

@@ -35,7 +35,6 @@ const PricingPage = (props: Props) => {
           </p>
         </div>
         <div>
-          {/* <ShimmerPlanCards/> */}
           <PlanCard onSelectPlan={handleSelectPlan} />
         </div>
       </div>{" "}

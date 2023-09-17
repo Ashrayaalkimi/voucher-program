@@ -43,7 +43,7 @@ const BillingDetails = () => {
   const fetchExchangeRate = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd,inr"
       );
       const data = await response.json();
       console.log("Response of exchange rate", data);
@@ -105,17 +105,18 @@ const BillingDetails = () => {
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRate = await fetchExchangeRate();
-        // console.log("Exchange Rate", exchangeRate);
+        console.log("Exchange Rate", exchangeRate);
         const amountInETH = totalPrice / exchangeRate;
-        // console.log("TotalPrice", totalPrice);
-        // console.log("Amount in etherum", amountInETH);
+        console.log("TotalPrice", totalPrice);
+        console.log("Amount in etherum", amountInETH);
         const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
+        console.log("Amount in wei", amountInWei);
         const transactionObject = {
           from: userAddress,
           to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", // Replace with the recipient's Ethereum address
           value: amountInWei, // Amount in wei
-          gas: web3.utils.toHex(21000),
-          gasPrice: web3.utils.toHex(web3.utils.toWei("25", "gwei")),
+          // gas: web3.utils.toHex(21000),
+          // gasPrice: web3.utils.toHex(web3.utils.toWei("25", "gwei")),
         };
         const txHash = await window.ethereum.request({
           method: "eth_sendTransaction",

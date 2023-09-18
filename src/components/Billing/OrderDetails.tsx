@@ -7,6 +7,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 type Props = {
     setTotalPrice: (price: number) => void;
+    setNametoPass:(name: string) => void;
+    setCurrencytoPass:(currency:string) => void;
 };
 
 interface ProductDetail {
@@ -22,7 +24,7 @@ interface ProductDetail {
   status: boolean;
 }
 
-const OrderDetails = ({setTotalPrice}: Props) => {
+const OrderDetails = ({setTotalPrice, setNametoPass, setCurrencytoPass}: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const getParams = searchParams.get("productId");
@@ -34,6 +36,8 @@ const OrderDetails = ({setTotalPrice}: Props) => {
   const [error, setError] = useState<string | null>(null);
 
   const [couponCode, setCouponCode] = useState<string>("");
+  const [currency, setCurrency] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [couponAppliedMessage, setCouponAppliedMessage] = useState<string | null>(
@@ -57,6 +61,8 @@ const OrderDetails = ({setTotalPrice}: Props) => {
           setProductDetail(data);
           console.log("ProductDetail data",data);
           setTotal(data.basePrice);
+          setName(data.name);
+          setCurrency(data.currency);
           setLoading(false);
           setError(null);
         })
@@ -70,6 +76,18 @@ const OrderDetails = ({setTotalPrice}: Props) => {
   useEffect(() => {
     setTotalPrice(total);
   }, [total, setTotalPrice]);
+
+  useEffect(() => {
+    setNametoPass(name);
+  }, [name, setNametoPass]);
+
+  useEffect(() => {
+    setNametoPass(name);
+  }, [name, setNametoPass]);
+
+  useEffect(() => {
+    setCurrencytoPass(currency);
+  }, [currency, setCurrencytoPass]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -108,6 +126,9 @@ const OrderDetails = ({setTotalPrice}: Props) => {
           // Update the appliedDiscount and total based on the response
           setAppliedDiscount(data.products[0].discountedPrice);
           setTotal(data.products[0].totalPrice);
+          setName(data.products[0].name);
+          setCurrency(data.products[0].currency);
+          console.log("Name and currency info", data.products[0].name, data.products[0].currency);
           setCouponAppliedMessage(`Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`);
           console.log("ProductDetail basePrice",productDetail.basePrice);
 

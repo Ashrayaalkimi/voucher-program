@@ -13,6 +13,7 @@ type SuccessPageProps = {
 
 const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
   const [paymentIntentId, setPaymentIntentId] = useState("");
+  const [voucherCode, setVoucherCode] = useState("");
   useEffect(() => {
     // Make an API call to fetch payment_intent_id using session_id
     const fetchPaymentIntentId = async () => {
@@ -35,15 +36,57 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
 
         const data = await response.json();
         setPaymentIntentId(data.payment_intent_id);
+        console.log("transaction id", data);
+
+        // Call the API to get voucher code
+        if (data.payment_intent_id && emailId) {
+          await fetchVoucherCode(data.payment_intent_id, emailId);
+        }
       } catch (error) {
         console.error("Error fetching payment_intent_id:", error);
+      }
+    };
+
+    const fetchVoucherCode = async (transactionId:string, email:string) => {
+      try {
+        const requestBody = {
+          userEmail: email,
+          affiliateCode: "ALERT10",
+          productId: 5,
+          transactionId: transactionId,
+          paymentStatus: "SUCCESS",
+          paymentMethod: "METAMASK",
+          walletId: "12djh478r9", // Update with the actual wallet ID
+          currency: "USD",
+        };
+
+        const response = await fetch(
+          "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch voucher code");
+        }
+
+        const voucherData = await response.json();
+        setVoucherCode(voucherData.voucherCode);
+        console.log("Voucher code:", voucherData.voucherCode);
+      } catch (error) {
+        console.error("Error fetching voucher code:", error);
       }
     };
 
     if (session_id) {
       fetchPaymentIntentId();
     }
-  }, [session_id]);
+  }, [session_id, emailId]);
 
   return (
     <>
@@ -52,17 +95,20 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id: <span className="text-white">{paymentIntentId}</span>.We have
-            also sent the voucher code to your email
+            Transaction id:{" "}
+            <span className="text-white">{paymentIntentId}</span>.We have also
+            sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>
           </p>
-          <div className="flex gap-2">
-            <h4>Code:</h4>
-            <div className="flex gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110">
-              <h4>345677654567890</h4>
-              <Image src={Copy} alt="Copy icon" />
+          {voucherCode && (
+            <div className="flex flex-col gap-2">
+              <h4>Voucher Code:</h4>
+              <div className="flex gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110">
+                <h4>{voucherCode}</h4>
+                <Image src={Copy} alt="Copy icon" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="h-0.5 lg:hidden w-full bg-[#434343]"></div>

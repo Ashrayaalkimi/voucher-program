@@ -4,16 +4,19 @@ import PaymentMethod from "../SelectPayment/PaymentMethod";
 import Email from "./Email";
 import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
+import { useRouter } from "next/navigation";
 
 const BillingDetails = () => {
-
+  const router = useRouter();
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState("creditCard");
   const [totalPrice, setTotalPrice] = useState(0);
+  const [NametoPass, setNametoPass] = useState("");
+  const [CurrencytoPass, setCurrencytoPass] = useState("");
   const [paymentError, setPaymentError] = useState("");
   const [emailError, setEmailError] = useState("");
-  // const [session_id, setSessionId] = useState("");
+  const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
 
@@ -28,7 +31,7 @@ const BillingDetails = () => {
         console.error("MetaMask or similar Ethereum wallet is not available.");
       }
     }
-  }, []); 
+  }, []);
 
   // const web3 = new Web3(window.ethereum);
   // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
@@ -79,13 +82,14 @@ const BillingDetails = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: "Name",
+              name: NametoPass,
               amount: totalPrice,
-              currency: "inr",
+              currency: CurrencytoPass,
               quantity: 1,
               mode: "payment",
-              success_url:
-                "https://voucher-project.netlify.app/payment-success",
+              success_url: 
+              // `http://localhost:3000/payment-success?session_id=${session_id}&emailId=${emailId}`,
+              "https://voucher-project.netlify.app/payment-success",
               cancel_url: "https://voucher-project.netlify.app/payment-failure",
               email_id: emailId,
             }),
@@ -94,11 +98,13 @@ const BillingDetails = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch Stripe Checkout Session URL");
         }
-
-        // const sessionData = await response.json();
-        // setSessionId(sessionData.session_id);
-        // console.log("sessioid stored is - ", sessionData.session_id);
-        // window.location.href = sessionData.url;
+        setEmailId(emailId);
+        const data = await response.json();
+        setSessionId(data.session_id);
+        console.log("session id stored is - ", data.session_id);
+        window.location.href = data.url;
+        // router.push(`/payment-success?session_id=${sessionId}&emailId=${emailId}`);
+        // window.location.href = `http://localhost:3000/payment-success?session_id=${sessionData.session_id}`;
       } catch (error) {
         console.error("Error processing payment:", error);
       }
@@ -139,7 +145,11 @@ const BillingDetails = () => {
         />
       </div>
       <div className="flex flex-col gap-6 max-w-lg">
-        <OrderDetails setTotalPrice={setTotalPrice} />
+        <OrderDetails
+          setTotalPrice={setTotalPrice}
+          setNametoPass={setNametoPass}
+          setCurrencytoPass={setCurrencytoPass}
+        />
         <div className="flex flex-col gap-4 justify-center">
           {paymentError && (
             <p className="text-red-500 text-sm">{paymentError}</p>

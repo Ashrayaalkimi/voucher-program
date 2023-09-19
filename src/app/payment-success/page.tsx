@@ -7,35 +7,30 @@ import QR from "../../../public/qrcode.svg";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-// type SuccessPageProps = {
-//   session_id: string; // Pass session_id as a prop
-//   emailId: string; // Pass emailId as a prop
-// };
-
-const SuccessPage = (
-  // { session_id, emailId }: SuccessPageProps
-  ) => {
+const SuccessPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const session_id = searchParams.get("session_id");
+  // const session_id = searchParams.get("session_id");
+  const session_id = localStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
 
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
+
   useEffect(() => {
-    // Make an API call to fetch payment_intent_id using session_id
     const fetchPaymentIntentId = async () => {
       try {
         const response = await fetch(
-          "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/",
+          `https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent?session_id=${session_id}`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
+              "Session-ID": session_id || '', 
             },
-            body: JSON.stringify({
-              session_id: session_id,
-            }),
+            // body: JSON.stringify({
+            //   session_id: session_id,
+            // }),
           }
         );
         if (!response.ok) {
@@ -50,12 +45,14 @@ const SuccessPage = (
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
         }
+         // Remove session_id from local storage after usage
+         localStorage.removeItem('session_id');
       } catch (error) {
         console.error("Error fetching payment_intent_id:", error);
       }
     };
 
-    const fetchVoucherCode = async (transactionId:string, email:string) => {
+    const fetchVoucherCode = async (transactionId: string, email: string) => {
       try {
         const requestBody = {
           userEmail: email,

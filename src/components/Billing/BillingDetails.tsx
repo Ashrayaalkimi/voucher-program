@@ -87,9 +87,9 @@ const BillingDetails = () => {
               currency: CurrencytoPass,
               quantity: 1,
               mode: "payment",
-              success_url: 
-              // `http://localhost:3000/payment-success?session_id=${session_id}&emailId=${emailId}`,
-              "https://voucher-project.netlify.app/payment-success",
+              success_url:
+                // `http://localhost:3000/payment-success?emailId=${emailId}`,
+                `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
               cancel_url: "https://voucher-project.netlify.app/payment-failure",
               email_id: emailId,
             }),
@@ -102,7 +102,10 @@ const BillingDetails = () => {
         const data = await response.json();
         setSessionId(data.session_id);
         console.log("session id stored is - ", data.session_id);
+        // Store session_id in local storage
+        localStorage.setItem("session_id", data.session_id);
         window.location.href = data.url;
+
         // router.push(`/payment-success?session_id=${sessionId}&emailId=${emailId}`);
         // window.location.href = `http://localhost:3000/payment-success?session_id=${sessionData.session_id}`;
       } catch (error) {

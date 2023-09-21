@@ -5,10 +5,8 @@ import Email from "./Email";
 import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
 import { useRouter } from "next/navigation";
-interface BillingDetailsProps {
-  couponCode: string;
-}
-const BillingDetails = ({couponCode}:BillingDetailsProps) => {
+
+const BillingDetails = () => {
   const router = useRouter();
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =

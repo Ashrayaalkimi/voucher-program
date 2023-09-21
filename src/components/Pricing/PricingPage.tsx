@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import PlanCard from "./PlanCard";
 import Banner from "./Banner";
 import ShimmerPlanCards from "./ShimmerPlanCards";
+import AffiliatePopup from "./AffiliatePopup";
 
 type Props = {};
 interface Product {
@@ -16,15 +17,19 @@ interface Product {
   status: boolean;
 }
 const PricingPage = (props: Props) => {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
 
   const handleSelectPlan = (product: Product) => {
     setSelectedPlan(product);
+    setIsPopupVisible(true);
+  };
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
   };
 
   return (
     <>
-      <Banner />
       <div className="flex flex-col items-center gap-10 lg:gap-20 py-16 xl:justify-center">
         <div className="flex flex-col items-center gap-3 ">
           <h1 className="text-5xl font-bold leading-[52px]">Vouchers</h1>
@@ -37,7 +42,9 @@ const PricingPage = (props: Props) => {
         <div>
           <PlanCard onSelectPlan={handleSelectPlan} />
         </div>
-      </div>{" "}
+      </div>
+      <AffiliatePopup onClose={handleClosePopup} />
+      {isPopupVisible && <AffiliatePopup onClose={handleClosePopup} />}
     </>
   );
 };

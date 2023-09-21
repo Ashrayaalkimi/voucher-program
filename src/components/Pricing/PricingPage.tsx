@@ -17,15 +17,10 @@ interface Product {
   status: boolean;
 }
 const PricingPage = (props: Props) => {
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
 
   const handleSelectPlan = (product: Product) => {
     setSelectedPlan(product);
-    setIsPopupVisible(true);
-  };
-  const handleClosePopup = () => {
-    setIsPopupVisible(false);
   };
 
   return (
@@ -43,8 +38,7 @@ const PricingPage = (props: Props) => {
           <PlanCard onSelectPlan={handleSelectPlan} />
         </div>
       </div>
-      <AffiliatePopup onClose={handleClosePopup} />
-      {isPopupVisible && <AffiliatePopup onClose={handleClosePopup} />}
+      <AffiliatePopup />
     </>
   );
 };

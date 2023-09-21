@@ -103,8 +103,8 @@ const SuccessPage = () => {
   }, [session_id, emailId]);
 
   return (
-    <>
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#131313] rounded-3xl lg:mt-40 p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#1b1b1b] rounded-3xl p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
         <div className="flex flex-col gap-3 justify-center items-center">
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
@@ -151,7 +151,7 @@ const SuccessPage = () => {
           Back to Home
         </button>
       </Link>
-    </>
+    </div>
   );
 };
 

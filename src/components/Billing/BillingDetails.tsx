@@ -5,8 +5,10 @@ import Email from "./Email";
 import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
 import { useRouter } from "next/navigation";
-
-const BillingDetails = () => {
+interface BillingDetailsProps {
+  couponCode: string;
+}
+const BillingDetails = ({couponCode}:BillingDetailsProps) => {
   const router = useRouter();
   const [emailId, setEmailId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -19,6 +21,7 @@ const BillingDetails = () => {
   const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
+ 
 
   useEffect(() => {
     // Check if window is defined (client-side)
@@ -46,7 +49,7 @@ const BillingDetails = () => {
   const fetchExchangeRate = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd,inr"
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
       );
       const data = await response.json();
       console.log("Response of exchange rate", data);
@@ -71,6 +74,10 @@ const BillingDetails = () => {
     if (!emailId) {
       setEmailError("Enter your email to proceed with payment");
     }
+    // if (!couponCode) {
+    //   setEmailError("Enter the affiliate code to proceed");
+    //   return;
+    // }
 
     if (selectedPaymentMethod === "creditCard") {
       try {
@@ -124,18 +131,15 @@ const BillingDetails = () => {
           from: userAddress,
           to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", // Replace with the recipient's Ethereum address
           value: amountInWei, // Amount in wei
-          // gas: web3.utils.toHex(21000),
-          // gasPrice: web3.utils.toHex(web3.utils.toWei("25", "gwei")),
         };
-        // const txHash = await window.ethereum.request({
-        //   method: "eth_sendTransaction",
-        //   params: [transactionObject],
-        // });
+       
         const txHash = await web3.eth.sendTransaction(transactionObject);
-
+        // localStorage.setItem("txHash", txHash);
+        router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
         console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);
+        router.push("https://voucher-project.netlify.app/payment-failure");
       }
     }
   };

@@ -56,10 +56,10 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
             {product.basePrice} {product.currency}/mo
           </h1>
           <ul className="my-2 flex flex-col gap-3 text-center text-[#cacaca]">
-            <li>1GB Bandwidth</li>
-            <li>Subdomain</li>
-            <li>1000 Users</li>
-            <li>Marketing Plan</li>
+            <li>Telegram</li>
+            <li>Email</li>
+            <li>In-app</li>
+            <li>Real time alerts</li>
           </ul>
           <button
             onClick={() => handleViewPlanbyId(product.id)}

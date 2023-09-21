@@ -127,10 +127,12 @@ const BillingDetails = () => {
           // gas: web3.utils.toHex(21000),
           // gasPrice: web3.utils.toHex(web3.utils.toWei("25", "gwei")),
         };
-        const txHash = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [transactionObject],
-        });
+        // const txHash = await window.ethereum.request({
+        //   method: "eth_sendTransaction",
+        //   params: [transactionObject],
+        // });
+        const txHash = await web3.eth.sendTransaction(transactionObject);
+
         console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);

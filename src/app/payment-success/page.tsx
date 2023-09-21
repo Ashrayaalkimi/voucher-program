@@ -9,6 +9,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const SuccessPage = () => {
   const router = useRouter();
+  const copyToClipboard = () => {
+    const textToCopy = voucherCode;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    });
+  };
+  const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
   // const session_id = searchParams.get("session_id");
   const session_id = localStorage.getItem("session_id");
@@ -21,16 +31,15 @@ const SuccessPage = () => {
     const fetchPaymentIntentId = async () => {
       try {
         const response = await fetch(
-          `https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent?session_id=${session_id}`,
+          `https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Session-ID": session_id || '', 
             },
-            // body: JSON.stringify({
-            //   session_id: session_id,
-            // }),
+            body: JSON.stringify({
+              session_id: session_id,
+            }),
           }
         );
         if (!response.ok) {
@@ -61,7 +70,7 @@ const SuccessPage = () => {
           transactionId: transactionId,
           paymentStatus: "SUCCESS",
           paymentMethod: "METAMASK",
-          walletId: "12djh478r9", // Update with the actual wallet ID
+          walletId: "12djh478r9",
           currency: "USD",
         };
 
@@ -105,12 +114,24 @@ const SuccessPage = () => {
             sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>
           </p>
+         
           {voucherCode && (
             <div className="flex flex-col gap-2">
               <h4>Voucher Code:</h4>
-              <div className="flex gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110">
-                <h4>{voucherCode}</h4>
-                <Image src={Copy} alt="Copy icon" />
+              <div className={`flex items-center gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110 ${
+                copied ? "bg-green-800" : ""
+              }`}
+              onClick={copyToClipboard}>
+                 <h4 className="text-sm font-medium">
+                {copied ? (
+                  "Copied!"
+                ) : (
+                  <div className="flex gap-1">
+                    <p>{voucherCode}</p>
+                    <Image src={Copy} alt="Copy icon" />
+                  </div>
+                )}
+              </h4>
               </div>
             </div>
           )}

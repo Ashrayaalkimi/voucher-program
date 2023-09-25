@@ -135,9 +135,10 @@ const BillingDetails = () => {
         // localStorage.setItem("txHash", txHash);
         // router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
         // Pass txHash as a query parameter to the SuccessPage
-        router.push(
-          `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
-        );
+        // router.push(
+        //   `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
+        //   // `http://localhost:3000/payment-success?emailId=${emailId}&txHash=${txHash}`
+        // );
         console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);

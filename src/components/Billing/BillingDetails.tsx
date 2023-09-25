@@ -130,16 +130,18 @@ const BillingDetails = () => {
           value: amountInWei, // Amount in wei
         };
 
-        const txHash = await web3.eth.sendTransaction(transactionObject);
-        console.log("Transaction sent with hash:", txHash);
+        const response = await web3.eth.sendTransaction(transactionObject);
+        console.log("Transaction sent with hash:", response.transactionHash);
+        const txHash = response.transactionHash;
+        console.log("txhash",txHash);
         // localStorage.setItem("txHash", txHash);
         // router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
         // Pass txHash as a query parameter to the SuccessPage
-        // router.push(
-        //   `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
-        //   // `http://localhost:3000/payment-success?emailId=${emailId}&txHash=${txHash}`
-        // );
-        console.log("Transaction sent with hash:", txHash);
+        router.push(
+          `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
+          // `http://localhost:3000/payment-success?emailId=${emailId}&txHash=${txHash}`
+        );
+        // console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);
         // router.push("https://voucher-project.netlify.app/payment-failure");

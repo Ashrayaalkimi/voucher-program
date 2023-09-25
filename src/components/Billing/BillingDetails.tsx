@@ -126,7 +126,7 @@ const BillingDetails = () => {
         console.log("Amount in wei", amountInWei);
         const transactionObject = {
           from: userAddress,
-          to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", // Replace with the recipient's Ethereum address
+          to: "0x9c4a1876aA0f4C4AdF251a0F7e9504caE565e0e0", // Replace with the recipient's Ethereum address
           value: amountInWei, // Amount in wei
         };
 

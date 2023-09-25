@@ -19,7 +19,6 @@ const BillingDetails = () => {
   const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
- 
 
   useEffect(() => {
     // Check if window is defined (client-side)
@@ -130,14 +129,19 @@ const BillingDetails = () => {
           to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", // Replace with the recipient's Ethereum address
           value: amountInWei, // Amount in wei
         };
-       
+
         const txHash = await web3.eth.sendTransaction(transactionObject);
+        console.log("Transaction sent with hash:", txHash);
         // localStorage.setItem("txHash", txHash);
-        router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
+        // router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
+        // Pass txHash as a query parameter to the SuccessPage
+        router.push(
+          `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
+        );
         console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);
-        router.push("https://voucher-project.netlify.app/payment-failure");
+        // router.push("https://voucher-project.netlify.app/payment-failure");
       }
     }
   };

@@ -23,7 +23,7 @@ const SuccessPage = () => {
   // const session_id = searchParams.get("session_id");
   const session_id = localStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
-
+  const txHash = searchParams.get("txHash"); 
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
 
@@ -109,7 +109,7 @@ const SuccessPage = () => {
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id:{" "}
+            Transaction id:
             <span className="text-white">{paymentIntentId}</span>.We have also
             sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>

@@ -180,7 +180,7 @@ const OrderDetails = ({
           </h4>
         </div>
         <p className="text-sm font-light">
-          1 GB Bandwidth, Subdomain, 1000 Users
+          Telegram, Email & In-app real-time alerts.{" "}
         </p>
       </div>
 

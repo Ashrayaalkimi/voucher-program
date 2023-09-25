@@ -133,10 +133,8 @@ const BillingDetails = () => {
         const response = await web3.eth.sendTransaction(transactionObject);
         console.log("Transaction sent with hash:", response.transactionHash);
         const txHash = response.transactionHash;
-        console.log("txhash",txHash);
         // localStorage.setItem("txHash", txHash);
-        // router.push(`https://voucher-project.netlify.app/payment-success?emailId=${emailId}`);
-        // Pass txHash as a query parameter to the SuccessPage
+        
         router.push(
           `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
           // `http://localhost:3000/payment-success?emailId=${emailId}&txHash=${txHash}`

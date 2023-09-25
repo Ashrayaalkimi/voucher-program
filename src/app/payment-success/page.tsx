@@ -54,6 +54,9 @@ const SuccessPage = () => {
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
         }
+        if (txHash && emailId) {
+          await fetchVoucherCode(txHash, emailId);
+        }
          // Remove session_id from local storage after usage
          localStorage.removeItem('session_id');
       } catch (error) {
@@ -100,7 +103,7 @@ const SuccessPage = () => {
     if (session_id) {
       fetchPaymentIntentId();
     }
-  }, [session_id, emailId]);
+  }, [session_id, emailId, txHash]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">

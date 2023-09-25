@@ -23,7 +23,7 @@ const SuccessPage = () => {
   // const session_id = searchParams.get("session_id");
   const session_id = localStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
-  const txHash = searchParams.get("txHash"); 
+  const txHash = searchParams.get("txHash");
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
 
@@ -54,11 +54,8 @@ const SuccessPage = () => {
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
         }
-        if (txHash && emailId) {
-          await fetchVoucherCode(txHash, emailId);
-        }
-         // Remove session_id from local storage after usage
-         localStorage.removeItem('session_id');
+        // Remove session_id from local storage after usage
+        localStorage.removeItem("session_id");
       } catch (error) {
         console.error("Error fetching payment_intent_id:", error);
       }
@@ -103,7 +100,48 @@ const SuccessPage = () => {
     if (session_id) {
       fetchPaymentIntentId();
     }
-  }, [session_id, emailId, txHash]);
+  }, [session_id, emailId]);
+
+  useEffect(() => {
+    const fetchVoucherCodeMetamask = async (txHash: any, emailId: any) => {
+      try {
+        const requestBody = {
+          userEmail: emailId,
+          affiliateCode: "ALERT10",
+          productId: 5,
+          transactionId: txHash,
+          paymentStatus: "SUCCESS",
+          paymentMethod: "METAMASK",
+          walletId: "12djh478r9",
+          currency: "USD",
+        };
+
+        const response = await fetch(
+          "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch voucher code");
+        }
+
+        const voucherData = await response.json();
+        setVoucherCode(voucherData.voucherCode);
+        console.log("Voucher code:", voucherData.voucherCode);
+      } catch (error) {
+        console.error("Error fetching voucher code:", error);
+      }
+    };
+    if (txHash && emailId) {
+      fetchVoucherCodeMetamask(txHash, emailId);
+    }
+  }, [txHash, emailId]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
@@ -112,29 +150,34 @@ const SuccessPage = () => {
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id:
-            <span className="text-white">{paymentIntentId}</span>.We have also
-            sent the voucher code to your email
+            Transaction id
+            <span className="text-white flex flex-wrap overflow-wrap break-word">
+              {paymentIntentId}
+              {txHash}
+            </span>
+            We have also sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>
           </p>
-         
+
           {voucherCode && (
             <div className="flex flex-col gap-2">
               <h4>Voucher Code:</h4>
-              <div className={`flex items-center gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110 ${
-                copied ? "bg-green-800" : ""
-              }`}
-              onClick={copyToClipboard}>
-                 <h4 className="text-sm font-medium">
-                {copied ? (
-                  "Copied!"
-                ) : (
-                  <div className="flex gap-1">
-                    <p>{voucherCode}</p>
-                    <Image src={Copy} alt="Copy icon" />
-                  </div>
-                )}
-              </h4>
+              <div
+                className={`flex items-center gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110 ${
+                  copied ? "bg-green-800" : ""
+                }`}
+                onClick={copyToClipboard}
+              >
+                <h4 className="text-sm font-medium">
+                  {copied ? (
+                    "Copied!"
+                  ) : (
+                    <div className="flex gap-1">
+                      <p>{voucherCode}</p>
+                      <Image src={Copy} alt="Copy icon" />
+                    </div>
+                  )}
+                </h4>
               </div>
             </div>
           )}

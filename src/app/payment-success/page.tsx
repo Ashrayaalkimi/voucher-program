@@ -153,6 +153,8 @@ const SuccessPage = () => {
             Transaction id
             <span className="text-white flex flex-wrap overflow-wrap break-word">
               {paymentIntentId}
+            </span>
+            <span className="text-white flex flex-wrap overflow-wrap break-word">
               {txHash}
             </span>
             We have also sent the voucher code to your email

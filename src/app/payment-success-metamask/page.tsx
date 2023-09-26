@@ -20,53 +20,18 @@ const SuccessPage = () => {
   };
   const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
-  // const session_id = searchParams.get("session_id");
-  const session_id = localStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
-  const [paymentIntentId, setPaymentIntentId] = useState("");
+  const txHash = searchParams.get("txHash");
   const [voucherCode, setVoucherCode] = useState("");
 
   useEffect(() => {
-    const fetchPaymentIntentId = async () => {
-      try {
-        const response = await fetch(
-          `https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              session_id: session_id,
-            }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch payment_intent_id");
-        }
-
-        const data = await response.json();
-        setPaymentIntentId(data.payment_intent_id);
-        console.log("transaction id", data);
-
-        // Call the API to get voucher code
-        if (data.payment_intent_id && emailId) {
-          await fetchVoucherCode(data.payment_intent_id, emailId);
-        }
-        // Remove session_id from local storage after usage
-        localStorage.removeItem("session_id");
-      } catch (error) {
-        console.error("Error fetching payment_intent_id:", error);
-      }
-    };
-
-    const fetchVoucherCode = async (transactionId: string, email: string) => {
+    const fetchVoucherCodeMetamask = async (txHash: any, emailId: any) => {
       try {
         const requestBody = {
-          userEmail: email,
+          userEmail: emailId,
           affiliateCode: "ALERT10",
           productId: 5,
-          transactionId: transactionId,
+          transactionId: txHash,
           paymentStatus: "SUCCESS",
           paymentMethod: "METAMASK",
           walletId: "12djh478r9",
@@ -95,11 +60,10 @@ const SuccessPage = () => {
         console.error("Error fetching voucher code:", error);
       }
     };
-
-    if (session_id) {
-      fetchPaymentIntentId();
+    if (txHash && emailId) {
+      fetchVoucherCodeMetamask(txHash, emailId);
     }
-  }, [session_id, emailId]);
+  }, [txHash, emailId]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
@@ -110,7 +74,7 @@ const SuccessPage = () => {
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
             Transaction id
             <span className="text-white flex flex-wrap overflow-wrap break-word">
-              {paymentIntentId}
+              {txHash}
             </span>
             We have also sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>

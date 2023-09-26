@@ -108,7 +108,7 @@ const BillingDetails = () => {
         console.log("session id stored is - ", data.session_id);
         // Store session_id in local storage
         localStorage.setItem("session_id", data.session_id);
-        window.location.href = data.url;
+        // window.location.href = data.url;
 
         // router.push(`/payment-success?session_id=${sessionId}&emailId=${emailId}`);
         // window.location.href = `http://localhost:3000/payment-success?session_id=${sessionData.session_id}`;

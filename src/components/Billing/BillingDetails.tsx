@@ -108,7 +108,7 @@ const BillingDetails = () => {
         console.log("session id stored is - ", data.session_id);
         // Store session_id in local storage
         localStorage.setItem("session_id", data.session_id);
-        // window.location.href = data.url;
+        window.location.href = data.url;
 
         // router.push(`/payment-success?session_id=${sessionId}&emailId=${emailId}`);
         // window.location.href = `http://localhost:3000/payment-success?session_id=${sessionData.session_id}`;
@@ -136,8 +136,8 @@ const BillingDetails = () => {
         // localStorage.setItem("txHash", txHash);
         
         router.push(
-          `https://voucher-project.netlify.app/payment-success?emailId=${emailId}&txHash=${txHash}`
-          // `http://localhost:3000/payment-success-me?emailId=${emailId}&txHash=${txHash}`
+          `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+          // `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
         );
         // console.log("Transaction sent with hash:", txHash);
       } catch (error) {

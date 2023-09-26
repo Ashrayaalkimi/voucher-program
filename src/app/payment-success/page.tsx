@@ -27,6 +27,7 @@ const SuccessPage = () => {
   const [voucherCode, setVoucherCode] = useState("");
 
   useEffect(() => {
+    console.log("session id is here in success page " + session_id)
     const fetchPaymentIntentId = async () => {
       try {
         const response = await fetch(
@@ -109,7 +110,7 @@ const SuccessPage = () => {
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
             Transaction id
-            <span className="text-white flex flex-wrap overflow-wrap break-word">
+            <span className="text-white">
               {paymentIntentId}
             </span>
             We have also sent the voucher code to your email

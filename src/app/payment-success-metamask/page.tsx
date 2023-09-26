@@ -72,7 +72,7 @@ const SuccessPage = () => {
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id
+            Transaction id : 
             <span className="text-white flex flex-wrap overflow-wrap break-word">
               {txHash}
             </span>

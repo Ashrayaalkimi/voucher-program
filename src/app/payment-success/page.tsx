@@ -108,9 +108,9 @@ const SuccessPage = () => {
         <div className="flex flex-col gap-3 justify-center items-center">
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
-          <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id
-            <span className="text-white">
+          <p className="text-[#b8b8b8] font-normal leading-6 mr-2 text-sm text-center lg:w-[360px]">
+            Transaction id: 
+            <span className="text-white mr-4">
               {paymentIntentId}
             </span>
             We have also sent the voucher code to your email
@@ -126,7 +126,7 @@ const SuccessPage = () => {
                 }`}
                 onClick={copyToClipboard}
               >
-                <h4 className="text-sm font-medium">
+                <h4 className="text-base font-medium">
                   {copied ? (
                     "Copied!"
                   ) : (

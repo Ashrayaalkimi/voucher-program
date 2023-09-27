@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlanCard from "./PlanCard";
 import Banner from "./Banner";
 import ShimmerPlanCards from "./ShimmerPlanCards";
@@ -18,6 +18,17 @@ interface Product {
 }
 const PricingPage = (props: Props) => {
   const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
+  const [showAffiliatePopup, setShowAffiliatePopup] = useState(false);
+
+  useEffect(() => {
+    // Show AffiliatePopup after 2 seconds
+    const timeoutId = setTimeout(() => {
+      setShowAffiliatePopup(true);
+    }, 3000);
+
+    // Clear the timeout if the component is unmounted before 2 seconds
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const handleSelectPlan = (product: Product) => {
     setSelectedPlan(product);
@@ -41,7 +52,7 @@ const PricingPage = (props: Props) => {
           <PlanCard onSelectPlan={handleSelectPlan} />
         </div>
       </div>
-      <AffiliatePopup />
+      {showAffiliatePopup && <AffiliatePopup />}
     </>
   );
 };

@@ -68,6 +68,8 @@ const OrderDetails = ({
           setCurrency(data.currency);
           setLoading(false);
           setError(null);
+          // Store productId in local storage
+          localStorage.setItem("productId", getParams);
         })
         .catch((error) => {
           setError("Error fetching product details");
@@ -150,6 +152,7 @@ const OrderDetails = ({
           setCouponAppliedMessage(
             `Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`
           );
+          localStorage.setItem("discountCode", couponCode);
           console.log("ProductDetail basePrice", productDetail.basePrice);
         } else {
           setError("This coupon code cannot be applied to this product");
@@ -199,6 +202,7 @@ const OrderDetails = ({
             // onChange={(e) => setCouponCode(e.target.value)}
             onChange={handleInputChange}
             onKeyDown={handleBackspace}
+            required
             className="block w-full p-3 pl-10 border-2 border-[#242424] bg-[#242424] outline-none text-[#ABABAB] text-sm font-light rounded-lg self-stretch gap-2 items-center"
           ></input>
           <button

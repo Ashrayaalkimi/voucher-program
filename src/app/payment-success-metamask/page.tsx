@@ -20,17 +20,20 @@ const SuccessPage = () => {
   };
   const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
+  const productId = localStorage.getItem("productId");
   const emailId = searchParams.get("emailId");
   const txHash = searchParams.get("txHash");
   const [voucherCode, setVoucherCode] = useState("");
-
+  const storedDiscountCode = localStorage.getItem("discountCode");
+  console.log("Stored discount code:", storedDiscountCode);
   useEffect(() => {
+   
     const fetchVoucherCodeMetamask = async (txHash: any, emailId: any) => {
       try {
         const requestBody = {
           userEmail: emailId,
-          affiliateCode: "ALERT10",
-          productId: 5,
+          affiliateCode: storedDiscountCode,
+          productId: productId,
           transactionId: txHash,
           paymentStatus: "SUCCESS",
           paymentMethod: "METAMASK",
@@ -63,7 +66,7 @@ const SuccessPage = () => {
     if (txHash && emailId) {
       fetchVoucherCodeMetamask(txHash, emailId);
     }
-  }, [txHash, emailId]);
+  }, [txHash, emailId, productId, storedDiscountCode]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">

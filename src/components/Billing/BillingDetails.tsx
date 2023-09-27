@@ -19,6 +19,7 @@ const BillingDetails = () => {
   const [session_id, setSessionId] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
+  const [showError, setShowError] = useState("");
 
   useEffect(() => {
     // Check if window is defined (client-side)
@@ -56,8 +57,9 @@ const BillingDetails = () => {
       } else {
         throw new Error("Unable to fetch exchange rate.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching exchange rate:", error);
+      setShowError(error.status);
       throw error;
     }
   };
@@ -105,13 +107,8 @@ const BillingDetails = () => {
         setEmailId(emailId);
         const data = await response.json();
         setSessionId(data.session_id);
-        console.log("session id stored is - ", data.session_id);
-        // Store session_id in local storage
         localStorage.setItem("session_id", data.session_id);
         window.location.href = data.url;
-
-        // router.push(`/payment-success?session_id=${sessionId}&emailId=${emailId}`);
-        // window.location.href = `http://localhost:3000/payment-success?session_id=${sessionData.session_id}`;
       } catch (error) {
         console.error("Error processing payment:", error);
       }
@@ -126,23 +123,20 @@ const BillingDetails = () => {
         console.log("Amount in wei", amountInWei);
         const transactionObject = {
           from: userAddress,
-          to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", // Replace with the recipient's Ethereum address
-          value: amountInWei, // Amount in wei
+          to: "0x45a2b69C21b11a7e00a26eD19A1582342911EfE6", 
+          value: amountInWei, 
         };
 
         const response = await web3.eth.sendTransaction(transactionObject);
         console.log("Transaction sent with hash:", response.transactionHash);
         const txHash = response.transactionHash;
-        // localStorage.setItem("txHash", txHash);
-        
         router.push(
           `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
           // `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
         );
-        // console.log("Transaction sent with hash:", txHash);
       } catch (error) {
         console.error("Error processing payment:", error);
-        // router.push("https://voucher-project.netlify.app/payment-failure");
+        router.push("https://voucher-project.netlify.app/payment-failure");
       }
     }
   };
@@ -180,6 +174,7 @@ const BillingDetails = () => {
           </p>
         </div>
       </div>
+      <div className="text-yellow text-xl font-bold">{showError}</div>
     </div>
   );
 };

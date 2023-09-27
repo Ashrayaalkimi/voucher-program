@@ -48,7 +48,7 @@ const Email = ({ setEmailId }: Props) => {
 
   return (
     <form>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-80">
         <h3 className="text-2xl font-medium">Billing Details</h3>
         <h4 className="text-sm font-medium">Email Address</h4>
         <div className="relative p-3 bg-[#242424] outline-none text-[#ABABAB] text-sm font-light rounded-lg self-stretch flex gap-2 items-center xl:w-[390px]">

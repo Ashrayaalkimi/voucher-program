@@ -68,14 +68,17 @@ const SuccessPage = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#1b1b1b] rounded-3xl p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
-        <div className="flex flex-col gap-3 justify-center items-center">
+        <div className="flex flex-col  gap-2 justify-center items-center">
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
+          <p className="text-[#b8b8b8] font-normal leading-6 text-center lg:w-[360px]">
+            Transaction id :
+          </p>
+          <span className="text-white font-normal leading-6 text-sm break-words lg:w-80">
+            {txHash}
+          </span>
+
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
-            Transaction id : 
-            <span className="text-white flex flex-wrap overflow-wrap break-word">
-              {txHash}
-            </span>
             We have also sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>
           </p>

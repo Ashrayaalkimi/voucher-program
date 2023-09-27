@@ -27,7 +27,7 @@ const SuccessPage = () => {
   const [voucherCode, setVoucherCode] = useState("");
 
   useEffect(() => {
-    console.log("session id is here in success page " + session_id)
+    console.log("session id is here in success page " + session_id);
     const fetchPaymentIntentId = async () => {
       try {
         const response = await fetch(
@@ -108,11 +108,11 @@ const SuccessPage = () => {
         <div className="flex flex-col gap-3 justify-center items-center">
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
-          <p className="text-[#b8b8b8] font-normal leading-6 mr-2 text-sm text-center lg:w-[360px]">
-            Transaction id: 
-            <span className="text-white mr-4">
-              {paymentIntentId}
-            </span>
+          <p className="text-[#b8b8b8] font-normal leading-6text-sm text-center lg:w-[360px]">
+            Transaction id:
+            <span className="text-white mr-4"> {paymentIntentId}</span>
+          </p>
+          <p className="text-[#b8b8b8] font-normal leading-6text-sm text-center lg:w-[360px]">
             We have also sent the voucher code to your email
             <span className="text-white font-light"> {emailId}</span>
           </p>
@@ -122,11 +122,11 @@ const SuccessPage = () => {
               <h4>Voucher Code:</h4>
               <div
                 className={`flex items-center gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110 ${
-                  copied ? "bg-green-800" : ""
+                  copied ? "bg-[#53902a]" : ""
                 }`}
                 onClick={copyToClipboard}
               >
-                <h4 className="text-base font-medium">
+                <h4 className="text-base  font-medium">
                   {copied ? (
                     "Copied!"
                   ) : (

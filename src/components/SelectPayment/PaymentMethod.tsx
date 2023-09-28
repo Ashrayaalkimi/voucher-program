@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Cardicons from "../../../public/icons.svg";
-import Metamask from "../../../public/metamask.svg";
+import Metamask from "../../../public/iconmeta.svg";
 // import ETH from "../../../public/eth.svg";
 // import USDT from "../../../public/usdt.svg";
 import Paypal from "../../../public/PayPal.svg";

@@ -22,6 +22,7 @@ const BillingDetails = () => {
   const [showError, setShowError] = useState("");
   const storedDiscountCode = localStorage.getItem("discountCode");
   console.log("Stored discount code:", storedDiscountCode);
+
   useEffect(() => {
     // Check if window is defined (client-side)
     if (typeof window !== "undefined") {
@@ -123,14 +124,14 @@ const BillingDetails = () => {
         const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
         console.log("Amount in wei", amountInWei);
           // Check user's wallet balance before proceeding
-      const userBalanceInWei = await web3.eth.getBalance(userAddress);
-      const userBalanceInETH = web3.utils.fromWei(userBalanceInWei, "ether");
+      // const userBalanceInWei = await web3.eth.getBalance(userAddress);
+      // const userBalanceInETH = web3.utils.fromWei(userBalanceInWei, "ether");
 
-      if (parseFloat(userBalanceInETH) < amountInETH) {
-        // Show Metamask extension popup indicating insufficient funds
-        alert("Insufficient funds in your Metamask wallet.");
-        return;
-      }
+      // if (parseFloat(userBalanceInETH) < amountInETH) {
+      //   // Show Metamask extension popup indicating insufficient funds
+      //   alert("Insufficient funds in your Metamask wallet.");
+      //   return;
+      // }
         const transactionObject = {
           from: userAddress,
           to: "0x9c4a1876aA0f4C4AdF251a0F7e9504caE565e0e0",

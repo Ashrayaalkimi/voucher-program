@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Cardicons from "../../../public/icons.svg";
-import Metamask from "../../../public/Etherium.svg";
+import Metamask from "../../../public/metamask.svg";
+// import ETH from "../../../public/eth.svg";
+// import USDT from "../../../public/usdt.svg";
 import Paypal from "../../../public/PayPal.svg";
 import { Web3Button } from "@web3modal/react";
 import ProviderWeb3Modal from "@/app/ProviderWeb3Modal";
@@ -18,7 +20,7 @@ const PaymentMethod = ({
   setSelectedPaymentMethod,
   setUserAddress,
 }: Props) => {
-  // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  // const [selectedCurrency, setselectedCurrency] = useState(false);
   const [isCreditCardSelected, setIsCreditCardSelected] = useState(false);
 
   const handlePaymentMethodChange = (
@@ -42,7 +44,7 @@ const PaymentMethod = ({
       });
       const userAddress = accounts[0]; // Assuming the first account
       setUserAddress(userAddress);
-      console.log("Senders wllet address : ", userAddress);
+      console.log("Senders wallet address : ", userAddress);
       setSelectedPaymentMethod("metamask");
     } catch (error) {
       console.error("Error connecting wallet:", error);
@@ -51,9 +53,9 @@ const PaymentMethod = ({
 
   return (
     <ProviderWeb3Modal>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 items-start">
         <h3 className="text-2xl font-medium">Payment Method</h3>
-        <div className="flex flex-col w-80 gap-3">
+        <div className="flex flex-col gap-4 w-full md:w-96">
           <label htmlFor="creditCard" className="flex cursor-pointer">
             <input
               type="radio"
@@ -115,14 +117,74 @@ const PaymentMethod = ({
               <Image src={Metamask} alt="Metamask Icons" />
             </div>
           </label>
-          {selectedPaymentMethod === "metamask" && (
-            <>
-              <button onClick={handleConnectWallet}>
-                <Web3Button></Web3Button>
-              </button>
-            </>
-          )}
+
+          {/* {selectedPaymentMethod === "metamask" && (
+            <div>
+              <h6 className="mb-4">Select Currency: </h6>
+              <div>
+                <ul className="grid w-full gap-6 md:grid-cols-2">
+                  <li>
+                    <input
+                      type="radio"
+                      id="eth"
+                      name="currency"
+                      value="eth"
+                      onClick={()=>setselectedCurrency(true)}
+                      className="hidden peer"
+                      required
+                    />
+                    <label
+                      htmlFor="eth"
+                      className="inline-flex items-center justify-center gap-2 w-full p-2 text-white bg-[#131313] border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-100 peer-checked:text-black hover:text-black hover:bg-gray-100 "
+                    >
+                      <Image src={ETH} alt="ETH Icon" />
+                      <div className="block">
+                        <div className="w-full text-lg font-semibold">ETH</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      id="usdt"
+                      name="currency"
+                      value="usdt"
+                      onClick={()=>setselectedCurrency(true)}
+
+                      className="hidden peer"
+                    />
+                    <label
+                      htmlFor="usdt"
+                      className="inline-flex items-center w-full p-2 justify-center gap-2 text-white bg-[#131313] border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-100 peer-checked:text-black hover:text-black hover:bg-gray-100 "
+                    >
+                      <Image src={USDT} alt="USDT Icon" />
+                      <div className="block">
+                        <div className="w-full text-lg font-semibold">
+                          USDT{" "}
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )} */}
         </div>
+
+        {/* {selectedCurrency && (
+          <>
+            <button onClick={handleConnectWallet}>
+              <Web3Button></Web3Button>
+            </button>
+          </>
+        )} */}
+        {selectedPaymentMethod === "metamask" && (
+          <>
+            <button onClick={handleConnectWallet}>
+              <Web3Button></Web3Button>
+            </button>
+          </>
+        )}
       </div>
     </ProviderWeb3Modal>
   );

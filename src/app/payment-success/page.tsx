@@ -21,7 +21,6 @@ const SuccessPage = () => {
   const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
   const productId = localStorage.getItem("productId");
-  // const session_id = searchParams.get("session_id");
   const session_id = localStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
   const [paymentIntentId, setPaymentIntentId] = useState("");
@@ -52,11 +51,9 @@ const SuccessPage = () => {
         setPaymentIntentId(data.payment_intent_id);
         console.log("transaction id", data);
 
-        // Call the API to get voucher code
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
         }
-        // Remove session_id from local storage after usage
         localStorage.removeItem("session_id");
       } catch (error) {
         console.error("Error fetching payment_intent_id:", error);

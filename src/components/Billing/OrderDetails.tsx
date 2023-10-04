@@ -68,7 +68,6 @@ const OrderDetails = ({
           setCurrency(data.currency);
           setLoading(false);
           setError(null);
-          // Store productId in local storage
           localStorage.setItem("productId", getParams);
         })
         .catch((error) => {
@@ -139,7 +138,6 @@ const OrderDetails = ({
           data.products.length > 0 &&
           data.products[0].id === Number(getParams)
         ) {
-          // Update the appliedDiscount and total based on the response
           setAppliedDiscount(data.products[0].discountedPrice);
           setTotal(data.products[0].totalPrice);
           setName(data.products[0].name);

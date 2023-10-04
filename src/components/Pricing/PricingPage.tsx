@@ -21,7 +21,6 @@ const PricingPage = (props: Props) => {
   const [showAffiliatePopup, setShowAffiliatePopup] = useState(false);
 
   useEffect(() => {
-    // Show AffiliatePopup after 2 seconds
     const timeoutId = setTimeout(() => {
       setShowAffiliatePopup(true);
     }, 3000);

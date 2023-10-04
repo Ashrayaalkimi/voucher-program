@@ -24,9 +24,8 @@ const BillingDetails = () => {
   console.log("Stored discount code:", storedDiscountCode);
 
   useEffect(() => {
-    // Check if window is defined (client-side)
     if (typeof window !== "undefined") {
-      const ethereum = (window as any).ethereum; // Use any type to access ethereum
+      const ethereum = (window as any).ethereum;
       if (ethereum) {
         const web3Instance = new Web3(ethereum);
         setWeb3(web3Instance);
@@ -95,9 +94,8 @@ const BillingDetails = () => {
               currency: CurrencytoPass,
               quantity: 1,
               mode: "payment",
-              success_url:
-                // `http://localhost:3000/payment-success?emailId=${emailId}`,
-                `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
+              success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
+              // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
               cancel_url: "https://voucher-project.netlify.app/payment-failure",
               email_id: emailId,
             }),
@@ -123,15 +121,15 @@ const BillingDetails = () => {
         console.log("Amount in etherum", amountInETH);
         const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
         console.log("Amount in wei", amountInWei);
-          // Check user's wallet balance before proceeding
-      // const userBalanceInWei = await web3.eth.getBalance(userAddress);
-      // const userBalanceInETH = web3.utils.fromWei(userBalanceInWei, "ether");
+        // Check user's wallet balance before proceeding
+        const userBalanceInWei = await web3.eth.getBalance(userAddress);
+        const userBalanceInETH = web3.utils.fromWei(userBalanceInWei, "ether");
 
-      // if (parseFloat(userBalanceInETH) < amountInETH) {
-      //   // Show Metamask extension popup indicating insufficient funds
-      //   alert("Insufficient funds in your Metamask wallet.");
-      //   return;
-      // }
+        if (parseFloat(userBalanceInETH) < amountInETH) {
+          // Showing Metamask extension popup indicating insufficient funds
+          alert("Insufficient funds in your Metamask wallet.");
+          return;
+        }
         const transactionObject = {
           from: userAddress,
           to: "0x9c4a1876aA0f4C4AdF251a0F7e9504caE565e0e0",
@@ -142,8 +140,8 @@ const BillingDetails = () => {
         console.log("Transaction sent with hash:", response.transactionHash);
         const txHash = response.transactionHash;
         router.push(
-          `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
-          // `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+          // `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+          `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
         );
       } catch (error) {
         console.error("Error processing payment:", error);

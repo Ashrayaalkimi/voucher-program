@@ -20,12 +20,13 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const storedDiscountCode = localStorage.getItem("discountCode");
+  const [storedDiscountCode,setStoredDiscountCode]= useState<string|null>("");
   console.log("Stored discount code:", storedDiscountCode);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const ethereum = (window as any).ethereum;
+      const ethereum = (window).ethereum;
+      setStoredDiscountCode(localStorage.getItem("discountCode"))
       if (ethereum) {
         const web3Instance = new Web3(ethereum);
         setWeb3(web3Instance);

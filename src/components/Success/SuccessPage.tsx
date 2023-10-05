@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Tick from "../../../public/tick.svg";
-import Copy from "../../../public/copyicon.svg";
-import QR from "../../../public/qrcode.svg";
+
+
 import Link from "next/link";
 
 type SuccessPageProps = {
@@ -92,7 +91,7 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
     <>
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#131313] rounded-3xl lg:mt-40 p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
         <div className="flex flex-col gap-3 justify-center items-center">
-          <Image src={Tick} alt="Success-tick" />
+          <Image src="/icons/tick.svg" alt="Success-tick" width={49} height={48}/>
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-[360px]">
             Transaction id:{" "}
@@ -105,7 +104,7 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
               <h4>Voucher Code:</h4>
               <div className="flex gap-1 bg-[#2d2d2d] px-2 rounded-[4px] cursor-pointer transition transform duration-500 hover:scale-110">
                 <h4>{voucherCode}</h4>
-                <Image src={Copy} alt="Copy icon" />
+                <Image src="/icons/copyicon.svg" alt="Copy icon" width={14} height={14}/>
               </div>
             </div>
           )}
@@ -114,7 +113,7 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
         <div className="h-0.5 lg:hidden w-full bg-[#434343]"></div>
         <div className="h-72 hidden lg:flex w-0.5 bg-[#434343]"></div>
         <div className="flex flex-col gap-3 items-center">
-          <Image src={QR} alt="Success-tick" />
+          <Image src="/icons/qrcode.svg" alt="Success-tick" width={225} height={228}/>
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-72">
             Please download app.leopard.ai to complete sign up and use voucher!
           </p>

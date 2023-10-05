@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import Copy from "../../../public/copyicon.svg";
 
 type Props = {};
 
@@ -40,7 +39,7 @@ const Banner = (props: Props) => {
                 ) : (
                   <div className="flex gap-1">
                     <p>ALERT10</p>
-                    <Image src={Copy} alt="Copy icon" />
+                    <Image src="/icons/copyicon.svg" alt="Copy icon" width={14} height={14}/>
                   </div>
                 )}
               </h4>

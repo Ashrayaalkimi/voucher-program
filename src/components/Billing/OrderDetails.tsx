@@ -1,8 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
 
 type Props = {
@@ -191,7 +189,7 @@ const OrderDetails = ({
         <h3 className="text-base font-medium">Discount Code</h3>
         <div className="relative flex">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Image src={Tag} alt="Tag" className=" w-4 h-4" />
+            <Image src="/icons/tag.svg" alt="Tag" width={20} height={20}/>
           </div>
           <input
             type="text"

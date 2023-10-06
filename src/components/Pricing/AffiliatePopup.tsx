@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { getCouponDetail } from "@/service";
 
 const AffiliatePopup = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -25,17 +26,8 @@ const AffiliatePopup = () => {
   };
 
   const handleProceedButton = async () => {
-    try {
-      const response = await fetch(
-        `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/affiliate/get/${couponCode}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Something wrong on network connection");
-      }
-
-      const couponData = await response.json();
-      const validTo = new Date(couponData.validTo);
+    await getCouponDetail(couponCode).then(response=>{
+      const validTo = new Date(response.validTo);
       const today = new Date();
       if (validTo < today) {
         setError("Affiliate code expired");
@@ -46,9 +38,10 @@ const AffiliatePopup = () => {
         }, 2000);
         setError(""); // Clear any previous error
       }
-    } catch (error) {
+    }).catch((error)=>{
+      console.log("error",error)
       setError("Sorry! Affiliate code does not exist");
-    }
+    })
   };
 
   return (

@@ -2,8 +2,9 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-
 import Link from "next/link";
+import { Voucher } from "@/types";
+import { getProductIntent, setVoucher } from "@/service";
 
 type SuccessPageProps = {
   session_id: string; // Pass session_id as a prop
@@ -16,70 +17,95 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
   useEffect(() => {
     // Make an API call to fetch payment_intent_id using session_id
     const fetchPaymentIntentId = async () => {
-      try {
-        const response = await fetch(
-          "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              session_id: session_id,
-            }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch payment_intent_id");
-        }
-
-        const data = await response.json();
-        setPaymentIntentId(data.payment_intent_id);
-        console.log("transaction id", data);
-
-        // Call the API to get voucher code
-        if (data.payment_intent_id && emailId) {
-          await fetchVoucherCode(data.payment_intent_id, emailId);
-        }
-      } catch (error) {
+      await getProductIntent(session_id).then(async(response)=>{
+        setPaymentIntentId(response.payment_intent_id);
+        console.log("transaction id", response);
+        if (response.payment_intent_id && emailId) {
+          await fetchVoucherCode(response.payment_intent_id, emailId);
+        }        
+      }).catch((error)=>{
         console.error("Error fetching payment_intent_id:", error);
-      }
+      })
+      // try {
+      //   const response = await fetch(
+      //     "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/get-product-intent/",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         session_id: session_id,
+      //       }),
+      //     }
+      //   );
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch payment_intent_id");
+      //   }
+
+      //   const data = await response.json();
+      //   setPaymentIntentId(data.payment_intent_id);
+      //   console.log("transaction id", data);
+
+      //   // Call the API to get voucher code
+      //   if (data.payment_intent_id && emailId) {
+      //     await fetchVoucherCode(data.payment_intent_id, emailId);
+      //   }
+      // } catch (error) {
+      //   console.error("Error fetching payment_intent_id:", error);
+      // }
     };
 
     const fetchVoucherCode = async (transactionId:string, email:string) => {
-      try {
-        const requestBody = {
-          userEmail: email,
-          affiliateCode: "ALERT10",
-          productId: 5,
-          transactionId: transactionId,
-          paymentStatus: "SUCCESS",
-          paymentMethod: "METAMASK",
-          walletId: "12djh478r9", // Update with the actual wallet ID
-          currency: "USD",
-        };
-
-        const response = await fetch(
-          "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch voucher code");
-        }
-
-        const voucherData = await response.json();
-        setVoucherCode(voucherData.voucherCode);
-        console.log("Voucher code:", voucherData.voucherCode);
-      } catch (error) {
+      const requestBody:Voucher = {
+        userEmail: email,
+        affiliateCode: "ALERT10",
+        productId: "5",
+        transactionId: transactionId,
+        paymentStatus: "SUCCESS",
+        paymentMethod: "METAMASK",
+        walletId: "12djh478r9", // Update with the actual wallet ID
+        currency: "USD",
+      };
+      await setVoucher(requestBody).then(response=>{
+        setVoucherCode(response.voucherCode);        
+        console.log("Voucher code:", response.voucherCode);
+      }).catch((error)=>{
         console.error("Error fetching voucher code:", error);
-      }
+      })
+      // try {
+      //   const requestBody = {
+      //     userEmail: email,
+      //     affiliateCode: "ALERT10",
+      //     productId: 5,
+      //     transactionId: transactionId,
+      //     paymentStatus: "SUCCESS",
+      //     paymentMethod: "METAMASK",
+      //     walletId: "12djh478r9", // Update with the actual wallet ID
+      //     currency: "USD",
+      //   };
+
+      //   const response = await fetch(
+      //     "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(requestBody),
+      //     }
+      //   );
+
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch voucher code");
+      //   }
+
+      //   const voucherData = await response.json();
+      //   setVoucherCode(voucherData.voucherCode);
+      //   console.log("Voucher code:", voucherData.voucherCode);
+      // } catch (error) {
+      //   console.error("Error fetching voucher code:", error);
+      // }
     };
 
     if (session_id) {

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Voucher } from "@/types";
+import { setVoucher } from "@/service";
 
 const SuccessPage = () => {
   const router = useRouter();
@@ -27,40 +29,57 @@ const SuccessPage = () => {
   useEffect(() => {
    
     const fetchVoucherCodeMetamask = async (txHash: any, emailId: any) => {
-      try {
-        const requestBody = {
-          userEmail: emailId,
-          affiliateCode: storedDiscountCode,
-          productId: productId,
-          transactionId: txHash,
-          paymentStatus: "SUCCESS",
-          paymentMethod: "METAMASK",
-          walletId: "12djh478r9",
-          currency: "USD",
-        };
-
-        const response = await fetch(
-          "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch voucher code");
-        }
-
-        const voucherData = await response.json();
-        setVoucherCode(voucherData.voucherCode);
+      const requestBody:Voucher = {
+        userEmail: emailId,
+        affiliateCode: storedDiscountCode,
+        productId: productId,
+        transactionId: txHash,
+        paymentStatus: "SUCCESS",
+        paymentMethod: "METAMASK",
+        walletId: "12djh478r9",
+        currency: "USD",
+      };
+      await setVoucher(requestBody).then(response=>{
+        setVoucherCode(response.voucherCode);
         localStorage.removeItem("discountCode");
-        console.log("Voucher code:", voucherData.voucherCode);
-      } catch (error) {
+        console.log("Voucher code:", response.voucherCode);
+      }).catch((error)=>{
         console.error("Error fetching voucher code:", error);
-      }
+      })
+      // try {
+      //   const requestBody = {
+      //     userEmail: emailId,
+      //     affiliateCode: storedDiscountCode,
+      //     productId: productId,
+      //     transactionId: txHash,
+      //     paymentStatus: "SUCCESS",
+      //     paymentMethod: "METAMASK",
+      //     walletId: "12djh478r9",
+      //     currency: "USD",
+      //   };
+
+      //   const response = await fetch(
+      //     "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/purchase/create",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(requestBody),
+      //     }
+      //   );
+
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch voucher code");
+      //   }
+
+      //   const voucherData = await response.json();
+      //   setVoucherCode(voucherData.voucherCode);
+      //   localStorage.removeItem("discountCode");
+      //   console.log("Voucher code:", voucherData.voucherCode);
+      // } catch (error) {
+      //   console.error("Error fetching voucher code:", error);
+      // }
     };
     if (txHash && emailId) {
       fetchVoucherCodeMetamask(txHash, emailId);

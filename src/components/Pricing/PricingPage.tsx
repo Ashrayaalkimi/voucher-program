@@ -2,22 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import PlanCard from "./PlanCard";
-import Banner from "./Banner";
-import ShimmerPlanCards from "./ShimmerPlanCards";
+// import Banner from "./Banner";
+// import ShimmerPlanCards from "./ShimmerPlanCards";
 import AffiliatePopup from "./AffiliatePopup";
+import { Product } from "@/types";
 
-type Props = {};
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  noOfAlerts: number;
-  basePrice: number;
-  currency: string;
-  status: boolean;
-}
-const PricingPage = (props: Props) => {
-  const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
+
+const PricingPage = () => {
+  // const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
   const [showAffiliatePopup, setShowAffiliatePopup] = useState(false);
 
   useEffect(() => {
@@ -30,7 +22,7 @@ const PricingPage = (props: Props) => {
   }, []);
 
   const handleSelectPlan = (product: Product) => {
-    setSelectedPlan(product);
+    // setSelectedPlan(product);
   };
 
   return (

@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import Cardicons from "../../../public/icons.svg";
-import Metamask from "../../../public/iconmeta.svg";
+
 // import ETH from "../../../public/eth.svg";
-// import USDT from "../../../public/usdt.svg";
-import Paypal from "../../../public/PayPal.svg";
+
+
 import { Web3Button } from "@web3modal/react";
 import ProviderWeb3Modal from "@/app/ProviderWeb3Modal";
 
@@ -68,7 +67,7 @@ const PaymentMethod = ({
             />
             <div className="flex justify-between w-full">
               <h6>Credit / Debit Card</h6>
-              <Image src={Cardicons} alt="Card Icons" />
+              <Image src="/icons/icons.svg" alt="Card Icons" width={73} height={16}/>
             </div>
           </label>
 
@@ -91,7 +90,7 @@ const PaymentMethod = ({
             />
             <div className="flex justify-between w-full">
               <h6>PayPal</h6>
-              <Image src={Paypal} alt="Paypal Icons" />
+              <Image src="/icons/PayPal.svg" alt="Paypal Icons" width={23} height={16}/>
             </div>
           </label>
 
@@ -114,7 +113,7 @@ const PaymentMethod = ({
             />
             <div className="flex justify-between w-full">
               <h6>MetaMask</h6>
-              <Image src={Metamask} alt="Metamask Icons" />
+              <Image src="/icons/iconmeta.svg" alt="Metamask Icons" width={23} height={16}/>
             </div>
           </label>
 
@@ -137,7 +136,7 @@ const PaymentMethod = ({
                       htmlFor="eth"
                       className="inline-flex items-center justify-center gap-2 w-full p-2 text-white bg-[#131313] border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-100 peer-checked:text-black hover:text-black hover:bg-gray-100 "
                     >
-                      <Image src={ETH} alt="ETH Icon" />
+                      <Image src={ETH} alt="ETH Icon" width={20} height={21}/>
                       <div className="block">
                         <div className="w-full text-lg font-semibold">ETH</div>
                       </div>
@@ -157,7 +156,7 @@ const PaymentMethod = ({
                       htmlFor="usdt"
                       className="inline-flex items-center w-full p-2 justify-center gap-2 text-white bg-[#131313] border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-100 peer-checked:text-black hover:text-black hover:bg-gray-100 "
                     >
-                      <Image src={USDT} alt="USDT Icon" />
+                      <Image src="/usdt.svg" alt="USDT Icon" width={20} height={20}/>
                       <div className="block">
                         <div className="w-full text-lg font-semibold">
                           USDT{" "}

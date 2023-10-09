@@ -7,7 +7,6 @@ import OrderDetails from "./OrderDetails";
 import { useRouter } from "next/navigation";
 import contractABI from "./abi.json";
 import { checkOutSession, getCoinDetails } from "@/service";
-import { error } from "console";
 import { CheckoutDetails } from "@/types";
 
 const BillingDetails = () => {
@@ -25,12 +24,10 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const [storedDiscountCode, setStoredDiscountCode] = useState<string | null>("")
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ethereum = (window as any).ethereum;
-      setStoredDiscountCode(localStorage.getItem("discountCode"));
       if (ethereum) {
         const web3Instance = new Web3(ethereum);
         setWeb3(web3Instance);
@@ -51,21 +48,14 @@ const BillingDetails = () => {
   const fetchExchangeRate = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=tether,ethereum&vs_currencies=usd"
+        process.env.NEXT_PUBLIC_COINGECKO_SERVER_URL+"/price?ids=tether,ethereum&vs_currencies=usd"
       );
       const data = await response.json();
       console.log("Response of exchange rate", data);
 
-      if (
-        data &&
-        data.ethereum &&
-        data.tether &&
-        data.ethereum.usd &&
-        data.tether.usd
-      ) {
+      if ( data && data.ethereum && data.tether && data.ethereum.usd && data.tether.usd ) {
         const ethereum_amount = data.ethereum.usd;
         const tether_amount = data.tether.usd;
-
         return { ethereum_amount, tether_amount };
       } else {
         throw new Error("Unable to fetch exchange rate.");
@@ -113,38 +103,7 @@ const BillingDetails = () => {
       }).catch((error)=>{
         console.error("Error processing payment:", error);
       })
-      // try {
-      //   const response = await fetch(
-      //     "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/product-checkout-session/",
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-        //     body: JSON.stringify({
-        //       name: NametoPass,
-        //       amount: totalPrice,
-        //       currency: CurrencytoPass,
-        //       quantity: 1,
-        //       mode: "payment",
-        //       success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
-        //       // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
-        //       cancel_url: "https://voucher-project.netlify.app/payment-failure",
-        //       email_id: emailId,
-        //     }),
-        //   }
-        // );
-      //   if (!response.ok) {
-      //     throw new Error("Failed to fetch Stripe Checkout Session URL");
-      //   }
-      //   setEmailId(emailId);
-      //   const data = await response.json();
-      //   setSessionId(data.session_id);
-      //   localStorage.setItem("session_id", data.session_id);
-      //   window.location.href = data.url;
-      // } catch (error) {
-      //   console.error("Error processing payment:", error);
-      // }
+
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRates = await fetchExchangeRate();

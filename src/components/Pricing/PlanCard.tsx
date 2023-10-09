@@ -4,16 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ShimmerPlanCards from "./ShimmerPlanCards";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  noOfAlerts: number;
-  basePrice: number;
-  currency: string;
-  status: boolean;
-}
+import { Product } from "@/types";
 
 type PlanCardProps = {
   onSelectPlan: (product: Product) => void;
@@ -32,7 +23,6 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
       .then((responseData) => {
         setProducts(responseData);
         setLoading(false);
-        console.log("responsedata", responseData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -45,7 +35,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
   };
 
   return (
-    <>
+    <section>
       {loading ? (
         <ShimmerPlanCards />
       ) : (
@@ -77,7 +67,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
                   : 0;
 
               return (
-                <div
+                <article
                   key={product.id}
                   className="group flex flex-col items-center p-5 gap-3 bg-[#242424] rounded-3xl shadow-md transform transition duration-500 hover:scale-105 lg:hover:scale-110"
                 >
@@ -102,13 +92,13 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
                   >
                     Proceed to payment
                   </button>
-                </div>
+                </article>
               );
             })}
           </div>
         </>
       )}
-    </>
+    </section>
   );
 };
 

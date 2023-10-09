@@ -44,7 +44,6 @@ const PaymentMethod = ({
       });
       const userAddress = accounts[0]; // Assuming the first account
       setUserAddress(userAddress);
-      console.log("Senders wallet address : ", userAddress);
       setSelectedPaymentMethod("metamask");
     } catch (error) {
       console.error("Error connecting wallet:", error);

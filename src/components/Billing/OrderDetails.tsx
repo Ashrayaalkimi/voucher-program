@@ -4,25 +4,13 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
+import { ProductDetail } from "@/types";
 
 type Props = {
   setTotalPrice: (price: number) => void;
   setNametoPass: (name: string) => void;
   setCurrencytoPass: (currency: string) => void;
 };
-
-interface ProductDetail {
-  id: number;
-  name: string;
-  description: string;
-  noOfAlerts: number;
-  basePrice: number;
-  discount: number;
-  discountedPrice: number;
-  totalPrice: number;
-  currency: string;
-  status: boolean;
-}
 
 const OrderDetails = ({
   setTotalPrice,
@@ -62,7 +50,6 @@ const OrderDetails = ({
         })
         .then((data) => {
           setProductDetail(data);
-          console.log("ProductDetail data", data);
           setTotal(data.basePrice);
           setName(data.name);
           setCurrency(data.currency);
@@ -131,8 +118,6 @@ const OrderDetails = ({
         return response.json();
       })
       .then((data) => {
-        console.log("coupon", data);
-        // Check if the product in the response matches the getParams
         if (
           data.products &&
           data.products.length > 0 &&
@@ -142,16 +127,10 @@ const OrderDetails = ({
           setTotal(data.products[0].totalPrice);
           setName(data.products[0].name);
           setCurrency(data.products[0].currency);
-          console.log(
-            "Name and currency info",
-            data.products[0].name,
-            data.products[0].currency
-          );
           setCouponAppliedMessage(
             `Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`
           );
           sessionStorage.setItem("discountCode", couponCode);
-          console.log("ProductDetail basePrice", productDetail.basePrice);
         } else {
           setError("This coupon code cannot be applied to this product");
           setAppliedDiscount(0);

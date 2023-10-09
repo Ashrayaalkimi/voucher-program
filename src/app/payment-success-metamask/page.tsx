@@ -58,9 +58,7 @@ const SuccessPage = () => {
 
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
-        // sessionStorage.removeItem("discountCode");
         sessionStorage.clear();
-        console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);
       }
@@ -71,9 +69,9 @@ const SuccessPage = () => {
   }, [txHash, emailId, productId, storedDiscountCode]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
+    <section className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center bg-[#1b1b1b] rounded-3xl p-6 lg:mx-auto lg:w-[700px] 2xl:w-[700px] ">
-        <div className="flex flex-col  gap-2 justify-center items-center">
+        <section className="flex flex-col  gap-2 justify-center items-center">
           <Image src={Tick} alt="Success-tick" />
           <h2 className="text-[32px] leading-normal font-semibold">Success</h2>
           <p className="text-[#b8b8b8] font-normal leading-6 text-center lg:w-[360px]">
@@ -110,23 +108,23 @@ const SuccessPage = () => {
               </div>
             </div>
           )}
-        </div>
+        </section>
 
         <div className="h-0.5 lg:hidden w-full bg-[#434343]"></div>
         <div className="h-72 hidden lg:flex w-0.5 bg-[#434343]"></div>
-        <div className="flex flex-col gap-3 items-center">
+        <article className="flex flex-col gap-3 items-center">
           <Image src={QR} alt="Success-tick" />
           <p className="text-[#b8b8b8] font-normal leading-6 text-sm text-center lg:w-72">
             Please download app.leopard.ai to complete sign up and use voucher!
           </p>
-        </div>
+        </article>
       </div>
       <Link href="/">
         <button className="fixed right-4 bottom-4 bg-[#131313] text-white py-2 px-4 rounded-full text-sm hover:bg-white hover:text-black">
           Back to Home
         </button>
       </Link>
-    </div>
+    </section>
   );
 };
 

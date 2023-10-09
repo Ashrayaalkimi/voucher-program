@@ -20,7 +20,7 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const storedDiscountCode = localStorage.getItem("discountCode");
+  const storedDiscountCode = sessionStorage.getItem("discountCode");
   console.log("Stored discount code:", storedDiscountCode);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const BillingDetails = () => {
         setEmailId(emailId);
         const data = await response.json();
         setSessionId(data.session_id);
-        localStorage.setItem("session_id", data.session_id);
+        sessionStorage.setItem("session_id", data.session_id);
         window.location.href = data.url;
       } catch (error) {
         console.error("Error processing payment:", error);

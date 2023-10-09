@@ -20,11 +20,11 @@ const SuccessPage = () => {
   };
   const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
-  const productId = localStorage.getItem("productId");
+  const productId = sessionStorage.getItem("productId");
   const emailId = searchParams.get("emailId");
   const txHash = searchParams.get("txHash");
   const [voucherCode, setVoucherCode] = useState("");
-  const storedDiscountCode = localStorage.getItem("discountCode");
+  const storedDiscountCode = sessionStorage.getItem("discountCode");
   console.log("Stored discount code:", storedDiscountCode);
   useEffect(() => {
    
@@ -58,7 +58,8 @@ const SuccessPage = () => {
 
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
-        localStorage.removeItem("discountCode");
+        // sessionStorage.removeItem("discountCode");
+        sessionStorage.clear();
         console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);

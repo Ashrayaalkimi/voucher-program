@@ -20,12 +20,12 @@ const SuccessPage = () => {
   };
   const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
-  const productId = localStorage.getItem("productId");
-  const session_id = localStorage.getItem("session_id");
+  const productId = sessionStorage.getItem("productId");
+  const session_id = sessionStorage.getItem("session_id");
   const emailId = searchParams.get("emailId");
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
-  const storedDiscountCode = localStorage.getItem("discountCode");
+  const storedDiscountCode = sessionStorage.getItem("discountCode");
   console.log("Stored discount code:", storedDiscountCode);
   useEffect(() => {
     console.log("session id is here in success page " + session_id);
@@ -54,7 +54,8 @@ const SuccessPage = () => {
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
         }
-        localStorage.removeItem("session_id");
+        // sessionStorage.removeItem("session_id");
+        sessionStorage.clear();
       } catch (error) {
         console.error("Error fetching payment_intent_id:", error);
       }
@@ -90,7 +91,7 @@ const SuccessPage = () => {
 
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
-        localStorage.removeItem("discountCode");
+        // sessionStorage.removeItem("discountCode");
         console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);

@@ -7,7 +7,6 @@ import OrderDetails from "./OrderDetails";
 import { useRouter } from "next/navigation";
 import contractABI from "./abi.json";
 import { checkOutSession, getCoinDetails } from "@/service";
-import { error } from "console";
 import { CheckoutDetails } from "@/types";
 
 const BillingDetails = () => {
@@ -25,7 +24,7 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const [storedDiscountCode, setStoredDiscountCode] = useState<string | null>("")
+  const [storedDiscountCode, setStoredDiscountCode] = useState<string | null>("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -40,12 +39,11 @@ const BillingDetails = () => {
     }
   }, []);
 
-  // const web3 = new Web3(window.ethereum);
-  // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
-
   if (!web3) {
-    console.error("Web3 is not available. Please install MetaMask or a similar Ethereum wallet.");
-    return null; 
+    console.error(
+      "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
+    );
+    return null;
   }
 
   const fetchExchangeRate = async () => {
@@ -54,8 +52,6 @@ const BillingDetails = () => {
         "https://api.coingecko.com/api/v3/simple/price?ids=tether,ethereum&vs_currencies=usd"
       );
       const data = await response.json();
-      console.log("Response of exchange rate", data);
-
       if (
         data &&
         data.ethereum &&
@@ -88,71 +84,39 @@ const BillingDetails = () => {
       return;
     }
     const storedDiscountCode = sessionStorage.getItem("discountCode");
-    console.log("Stored discount code:", storedDiscountCode);
     if (storedDiscountCode === null) {
       setPaymentError(
         "Please enter your discount code to proceed with payment"
       );
     } else if (selectedPaymentMethod === "creditCard") {
-      let data : CheckoutDetails ={
+      let data: CheckoutDetails = {
         name: NametoPass,
         amount: totalPrice,
         currency: CurrencytoPass,
         quantity: 1,
         mode: "payment",
-        success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
-        // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
-        cancel_url: "https://voucher-project.netlify.app/payment-failure",
+        success_url: `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-success?emailId=${emailId}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-failure`,
         email_id: emailId,
-      }
-      await checkOutSession(data).then((response)=>{
-        setEmailId(emailId);
-        setSessionId(response.session_id);
-        sessionStorage.setItem("session_id", response.session_id);
-        window.location.href = response.url;
-      }).catch((error)=>{
-        console.error("Error processing payment:", error);
-      })
-      // try {
-      //   const response = await fetch(
-      //     "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/product-checkout-session/",
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-        //     body: JSON.stringify({
-        //       name: NametoPass,
-        //       amount: totalPrice,
-        //       currency: CurrencytoPass,
-        //       quantity: 1,
-        //       mode: "payment",
-        //       success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
-        //       // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
-        //       cancel_url: "https://voucher-project.netlify.app/payment-failure",
-        //       email_id: emailId,
-        //     }),
-        //   }
-        // );
-      //   if (!response.ok) {
-      //     throw new Error("Failed to fetch Stripe Checkout Session URL");
-      //   }
-      //   setEmailId(emailId);
-      //   const data = await response.json();
-      //   setSessionId(data.session_id);
-      //   localStorage.setItem("session_id", data.session_id);
-      //   window.location.href = data.url;
-      // } catch (error) {
-      //   console.error("Error processing payment:", error);
-      // }
+      };
+      await checkOutSession(data)
+        .then((response) => {
+          setEmailId(emailId);
+          setSessionId(response.session_id);
+          sessionStorage.setItem("session_id", response.session_id);
+          window.location.href = response.url;
+        })
+        .catch((error) => {
+          console.error("Error processing payment:", error);
+        });
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRates = await fetchExchangeRate();
-        console.log("Ethereum Exchange rate:", exchangeRates.ethereum_amount);
-        console.log(`1 ETH =${exchangeRates.ethereum_amount} USD`);
+        // console.log("Ethereum Exchange rate:", exchangeRates.ethereum_amount);
+        // console.log(`1 ETH =${exchangeRates.ethereum_amount} USD`);
 
-        console.log("Tether Exchange Rate:", exchangeRates.tether_amount);
-        console.log(`1 USDT =${exchangeRates.tether_amount} USD`);
+        // console.log("Tether Exchange Rate:", exchangeRates.tether_amount);
+        // console.log(`1 USDT =${exchangeRates.tether_amount} USD`);
 
         const ETH_AMOUNT = exchangeRates.ethereum_amount;
         const TETHER_AMOUNT = exchangeRates.tether_amount;
@@ -161,14 +125,16 @@ const BillingDetails = () => {
 
         if (selectedTokenType === "eth") {
           const amountInETH = totalPrice / ETH_AMOUNT;
-          console.log("TotalPrice", totalPrice);
-          console.log("Amount in etherum", amountInETH);
+          // console.log("TotalPrice", totalPrice);
+          // console.log("Amount in etherum", amountInETH);
           if (!web3) {
-            console.error("Web3 is not available. Please install MetaMask or a similar Ethereum wallet.");
-            return null; 
+            console.error(
+              "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
+            );
+            return null;
           }
           const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
-          console.log("Amount in wei", amountInWei);
+          // console.log("Amount in wei", amountInWei);
           // Check user's wallet balance before proceeding
           const userBalanceInWei = await web3.eth.getBalance(userAddress);
           const userBalanceInETH = web3.utils.fromWei(
@@ -189,30 +155,27 @@ const BillingDetails = () => {
           const response = await web3.eth.sendTransaction(transactionObject);
           const txHash = response.transactionHash;
           router.push(
-            // `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
-            `/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+            `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
           );
         } else if (selectedTokenType === "usdt") {
           try {
             const amountInUSDT = totalPrice / TETHER_AMOUNT;
-            console.log("AMOUNT IN USDT:", amountInUSDT);
+            // console.log("AMOUNT IN USDT:", amountInUSDT);
 
-            const usdtAmountWei = web3.utils.toWei(amountInUSDT, "ether");
-            console.log("USDT AMOUNT IN WEI", usdtAmountWei);
+            const usdtAmountWei = web3.utils.toWei(amountInUSDT, "tether");
+            // console.log("USDT AMOUNT IN WEI", usdtAmountWei);
 
             const usdtContractAddress =
               "0xdAC17F958D2ee523a2206206994597C13D831ec7";
             const usdtContractAbi = contractABI.contractABI;
-            console.log("abi", usdtContractAbi);
             const usdtContract = new web3.eth.Contract(
               usdtContractAbi,
               usdtContractAddress
             );
-            console.log("usdt contract", usdtContract);
 
             const transferTransactionObject = {
               from: userAddress,
-              to: usdtContractAddress, 
+              to: usdtContractAddress,
               data: usdtContract.methods
                 .transfer(recipientAddress, usdtAmountWei)
                 .encodeABI(),
@@ -227,7 +190,7 @@ const BillingDetails = () => {
             const txHash = response.transactionHash;
 
             router.push(
-              `/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+              `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
             );
 
             // await usdtContract.methods

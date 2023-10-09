@@ -38,12 +38,10 @@ const BillingDetails = () => {
   // const web3 = new Web3(window.ethereum);
   // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
 
-  // if (!web3) {
-  //   console.error(
-  //     "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
-  //   );
-  //   return null;
-  // }
+  if (!web3) {
+    console.error("Web3 is not available. Please install MetaMask or a similar Ethereum wallet.");
+    return null; 
+  }
 
   const fetchExchangeRate = async () => {
     try {
@@ -141,6 +139,10 @@ const BillingDetails = () => {
           const amountInETH = totalPrice / ETH_AMOUNT;
           console.log("TotalPrice", totalPrice);
           console.log("Amount in etherum", amountInETH);
+          if (!web3) {
+            console.error("Web3 is not available. Please install MetaMask or a similar Ethereum wallet.");
+            return null; 
+          }
           const amountInWei = web3.utils.toWei(amountInETH.toString(), "ether");
           console.log("Amount in wei", amountInWei);
           // Check user's wallet balance before proceeding

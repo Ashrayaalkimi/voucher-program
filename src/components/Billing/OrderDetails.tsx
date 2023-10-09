@@ -68,7 +68,7 @@ const OrderDetails = ({
           setCurrency(data.currency);
           setLoading(false);
           setError(null);
-          localStorage.setItem("productId", getParams);
+          sessionStorage.setItem("productId", getParams);
         })
         .catch((error) => {
           setError("Error fetching product details");
@@ -150,7 +150,7 @@ const OrderDetails = ({
           setCouponAppliedMessage(
             `Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`
           );
-          localStorage.setItem("discountCode", couponCode);
+          sessionStorage.setItem("discountCode", couponCode);
           console.log("ProductDetail basePrice", productDetail.basePrice);
         } else {
           setError("This coupon code cannot be applied to this product");

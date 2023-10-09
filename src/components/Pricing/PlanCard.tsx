@@ -23,7 +23,6 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
       .then((responseData) => {
         setProducts(responseData);
         setLoading(false);
-        console.log("responsedata", responseData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

@@ -36,7 +36,6 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
 
         const data = await response.json();
         setPaymentIntentId(data.payment_intent_id);
-        console.log("transaction id", data);
 
         // Call the API to get voucher code
         if (data.payment_intent_id && emailId) {
@@ -77,7 +76,6 @@ const SuccessPage = ({ session_id, emailId }: SuccessPageProps) => {
 
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
-        console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);
       }

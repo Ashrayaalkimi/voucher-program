@@ -8,7 +8,6 @@ const ErrorPopup = (props: Props) => {
   const [isVisible, setIsVisible] = useState(true);
   const handleCloseButton = () => {
     setIsVisible(false);
-    console.log("close button clicked");
   };
   return (
     <>

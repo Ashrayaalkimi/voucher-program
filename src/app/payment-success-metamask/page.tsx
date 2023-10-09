@@ -58,9 +58,7 @@ const SuccessPage = () => {
 
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
-        // sessionStorage.removeItem("discountCode");
         sessionStorage.clear();
-        console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);
       }

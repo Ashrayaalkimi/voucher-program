@@ -11,7 +11,6 @@ const AffiliatePopup = () => {
 
   const handleCloseButton = () => {
     setIsVisible(false);
-    console.log("close button clicked")
   };
 
   const handleInputChange = (e:any) => {

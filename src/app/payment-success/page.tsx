@@ -28,7 +28,6 @@ const SuccessPage = () => {
   const storedDiscountCode = sessionStorage.getItem("discountCode");
   console.log("Stored discount code:", storedDiscountCode);
   useEffect(() => {
-    console.log("session id is here in success page " + session_id);
     const fetchPaymentIntentId = async () => {
       try {
         const response = await fetch(
@@ -49,7 +48,6 @@ const SuccessPage = () => {
 
         const data = await response.json();
         setPaymentIntentId(data.payment_intent_id);
-        console.log("transaction id", data);
 
         if (data.payment_intent_id && emailId) {
           await fetchVoucherCode(data.payment_intent_id, emailId);
@@ -92,7 +90,6 @@ const SuccessPage = () => {
         const voucherData = await response.json();
         setVoucherCode(voucherData.voucherCode);
         // sessionStorage.removeItem("discountCode");
-        console.log("Voucher code:", voucherData.voucherCode);
       } catch (error) {
         console.error("Error fetching voucher code:", error);
       }
@@ -151,7 +148,7 @@ const SuccessPage = () => {
             Please download app.leopard.ai to complete sign up and use voucher!
           </p>
         </article>
-        
+
       </div>
       <Link href="/">
         <button className="fixed right-4 bottom-4 bg-[#131313] text-white py-2 px-4 rounded-full text-sm hover:bg-white hover:text-black">

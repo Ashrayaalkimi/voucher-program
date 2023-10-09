@@ -20,8 +20,7 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const storedDiscountCode = sessionStorage.getItem("discountCode");
-  console.log("Stored discount code:", storedDiscountCode);
+  
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -38,12 +37,12 @@ const BillingDetails = () => {
   // const web3 = new Web3(window.ethereum);
   // const web3 = window.ethereum ? new Web3(window.ethereum) : null;
 
-  if (!web3) {
-    console.error(
-      "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
-    );
-    return null;
-  }
+  // if (!web3) {
+  //   console.error(
+  //     "Web3 is not available. Please install MetaMask or a similar Ethereum wallet."
+  //   );
+  //   return null;
+  // }
 
   const fetchExchangeRate = async () => {
     try {
@@ -75,6 +74,8 @@ const BillingDetails = () => {
       setEmailError("Enter your email to proceed with payment");
       return;
     }
+    const storedDiscountCode = sessionStorage.getItem("discountCode");
+  console.log("Stored discount code:", storedDiscountCode);
     if (storedDiscountCode === null) {
       setPaymentError(
         "Please enter your discount code to proceed with payment"
@@ -137,7 +138,6 @@ const BillingDetails = () => {
         };
 
         const response = await web3.eth.sendTransaction(transactionObject);
-        console.log("Transaction sent with hash:", response.transactionHash);
         const txHash = response.transactionHash;
         router.push(
           // `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`

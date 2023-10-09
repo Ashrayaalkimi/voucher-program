@@ -196,7 +196,7 @@ const BillingDetails = () => {
         }
       } catch (error) {
         console.error("Error processing payment:", error);
-        router.push("/payment-failure");
+        router.push(`${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-failure`);
       }
     }
   };

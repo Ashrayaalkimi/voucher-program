@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import PlanCard from "./PlanCard";
 import AffiliatePopup from "./AffiliatePopup";
-import { Product } from "@/interfaces/ClientInterfaces";
+import { Product } from "@/types";
 
 const PricingPage = () => {
   const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);

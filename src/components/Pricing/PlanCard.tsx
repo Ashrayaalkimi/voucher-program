@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ShimmerPlanCards from "./ShimmerPlanCards";
-import { Product } from "@/interfaces/ClientInterfaces";
+import { Product } from "@/types";
 
 type PlanCardProps = {
   onSelectPlan: (product: Product) => void;

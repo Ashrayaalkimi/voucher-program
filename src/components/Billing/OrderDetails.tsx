@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ProductDetail } from "@/interfaces/ClientInterfaces";
+import { ProductDetail } from "@/types";
 
 type Props = {
   setTotalPrice: (price: number) => void;

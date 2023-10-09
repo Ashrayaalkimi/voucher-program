@@ -3,24 +3,26 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Cardicons from "../../../public/icons.svg";
 import Metamask from "../../../public/iconmeta.svg";
-// import ETH from "../../../public/eth.svg";
-// import USDT from "../../../public/usdt.svg";
+import ETH from "../../../public/eth.svg";
+import USDT from "../../../public/usdt.svg";
 import Paypal from "../../../public/PayPal.svg";
 import { Web3Button } from "@web3modal/react";
 import ProviderWeb3Modal from "@/app/ProviderWeb3Modal";
 
 type Props = {
   selectedPaymentMethod: string;
+  selectedTokenType:string;
+  setSelectedTokenType: (method:string) => void;
   setSelectedPaymentMethod: (method: string) => void;
   setUserAddress: (address: string) => void; //senders wallet address
 };
 
 const PaymentMethod = ({
   selectedPaymentMethod,
-  setSelectedPaymentMethod,
+  setSelectedPaymentMethod,setSelectedTokenType,
   setUserAddress,
 }: Props) => {
-  // const [selectedCurrency, setselectedCurrency] = useState(false);
+  const [selectedCurrency, setselectedCurrency] = useState(false);
   const [isCreditCardSelected, setIsCreditCardSelected] = useState(false);
 
   const handlePaymentMethodChange = (
@@ -35,6 +37,12 @@ const PaymentMethod = ({
     } else {
       setIsCreditCardSelected(false);
     }
+  };
+  const handleTokenChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newTokenType= event.target.value;
+    setSelectedTokenType(newTokenType);
   };
 
   const handleConnectWallet = async () => {
@@ -117,7 +125,7 @@ const PaymentMethod = ({
             </div>
           </label>
 
-          {/* {selectedPaymentMethod === "metamask" && (
+        {selectedPaymentMethod === "metamask" && (
             <div>
               <h6 className="mb-4">Select Currency: </h6>
               <div>
@@ -128,7 +136,9 @@ const PaymentMethod = ({
                       id="eth"
                       name="currency"
                       value="eth"
+                      // onClick={handleConnectWallet}
                       onClick={()=>setselectedCurrency(true)}
+                      onChange={handleTokenChange}
                       className="hidden peer"
                       required
                     />
@@ -147,9 +157,10 @@ const PaymentMethod = ({
                       type="radio"
                       id="usdt"
                       name="currency"
+                      onChange={handleTokenChange}
                       value="usdt"
                       onClick={()=>setselectedCurrency(true)}
-
+                      // onClick={handleConnectWallet}
                       className="hidden peer"
                     />
                     <label
@@ -167,23 +178,23 @@ const PaymentMethod = ({
                 </ul>
               </div>
             </div>
-          )} */}
+          )}
         </div>
 
-        {/* {selectedCurrency && (
-          <>
-            <button onClick={handleConnectWallet}>
-              <Web3Button></Web3Button>
-            </button>
-          </>
-        )} */}
-        {selectedPaymentMethod === "metamask" && (
+        {selectedCurrency && (
           <>
             <button onClick={handleConnectWallet}>
               <Web3Button></Web3Button>
             </button>
           </>
         )}
+        {/* {selectedPaymentMethod === "metamask" && (
+          <>
+            <button onClick={handleConnectWallet}>
+              <Web3Button></Web3Button>
+            </button>
+          </>
+        )} */}
       </div>
     </ProviderWeb3Modal>
   );

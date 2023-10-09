@@ -5,27 +5,27 @@ import { getCouponDetail } from "@/service";
 const AffiliatePopup = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [error, setError] = useState("");
-  const [couponCode, setCouponCode] = useState(""); 
+  const [couponCode, setCouponCode] = useState("");
   const [existMsg, setExistMsg] = useState(false);
 
   const handleCloseButton = () => {
     setIsVisible(false);
   };
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const inputText = e.target.value;
     setCouponCode(inputText);
     setError("");
   };
 
-  const handleBackspace = (e:any) => {
+  const handleBackspace = (e: any) => {
     if (e.keyCode === 8) {
-      setError(""); 
+      setError("");
     }
   };
 
   const handleProceedButton = async () => {
-    await getCouponDetail(couponCode).then(response=>{
+    await getCouponDetail(couponCode).then(response => {
       const validTo = new Date(response.validTo);
       const today = new Date();
       if (validTo < today) {
@@ -37,8 +37,8 @@ const AffiliatePopup = () => {
         }, 2000);
         setError(""); // Clear any previous error
       }
-    }).catch((error)=>{
-      console.log("error",error)
+    }).catch((error) => {
+      console.log("error", error)
       setError("Sorry! Affiliate code does not exist");
     })
   };
@@ -54,7 +54,7 @@ const AffiliatePopup = () => {
             </h2>
             <div className="relative flex w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Image src="/icons/tag.svg" alt="Tag" className=" w-4 h-4" width={20} height={20}/>
+                <Image src="/icons/tag.svg" alt="Tag" className=" w-4 h-4" width={20} height={20} />
               </div>
               <input
                 type="text"
@@ -62,13 +62,13 @@ const AffiliatePopup = () => {
                 value={couponCode}
                 // onChange={(e) => setCouponCode(e.target.value)}
                 onChange={handleInputChange}
-                onKeyDown={handleBackspace} 
+                onKeyDown={handleBackspace}
                 className="flex w-full p-3 pl-10 border-none bg-[#242424] outline-none text-[#ABABAB] text-sm font-light rounded-lg "
               ></input>
             </div>
-            <button 
-            onClick={handleProceedButton}
-            className="text-black w-full text-base font-medium py-3 px-16 lg:px-16 bg-white rounded-xl">
+            <button
+              onClick={handleProceedButton}
+              className="text-black w-full text-base font-medium py-3 px-16 lg:px-16 bg-white rounded-xl">
               Proceed
             </button>
             {error && <div className="text-red-500 text-xs">{error}</div>}

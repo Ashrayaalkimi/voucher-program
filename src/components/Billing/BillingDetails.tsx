@@ -24,12 +24,10 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  const [storedDiscountCode, setStoredDiscountCode] = useState<string | null>("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ethereum = (window as any).ethereum;
-      setStoredDiscountCode(localStorage.getItem("discountCode"));
       if (ethereum) {
         const web3Instance = new Web3(ethereum);
         setWeb3(web3Instance);
@@ -49,19 +47,14 @@ const BillingDetails = () => {
   const fetchExchangeRate = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=tether,ethereum&vs_currencies=usd"
+        process.env.NEXT_PUBLIC_COINGECKO_SERVER_URL+"/price?ids=tether,ethereum&vs_currencies=usd"
       );
       const data = await response.json();
-      if (
-        data &&
-        data.ethereum &&
-        data.tether &&
-        data.ethereum.usd &&
-        data.tether.usd
-      ) {
+      console.log("Response of exchange rate", data);
+
+      if ( data && data.ethereum && data.tether && data.ethereum.usd && data.tether.usd ) {
         const ethereum_amount = data.ethereum.usd;
         const tether_amount = data.tether.usd;
-
         return { ethereum_amount, tether_amount };
       } else {
         throw new Error("Unable to fetch exchange rate.");
@@ -98,17 +91,16 @@ const BillingDetails = () => {
         success_url: `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-success?emailId=${emailId}`,
         cancel_url: `${process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL}payment-failure`,
         email_id: emailId,
-      };
-      await checkOutSession(data)
-        .then((response) => {
-          setEmailId(emailId);
-          setSessionId(response.session_id);
-          sessionStorage.setItem("session_id", response.session_id);
-          window.location.href = response.url;
-        })
-        .catch((error) => {
-          console.error("Error processing payment:", error);
-        });
+      }
+      await checkOutSession(data).then((response)=>{
+        setEmailId(emailId);
+        setSessionId(response.session_id);
+        sessionStorage.setItem("session_id", response.session_id);
+        window.location.href = response.url;
+      }).catch((error)=>{
+        console.error("Error processing payment:", error);
+      })
+
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRates = await fetchExchangeRate();

@@ -36,7 +36,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
   };
 
   return (
-    <>
+    <section>
       {loading ? (
         <ShimmerPlanCards />
       ) : (
@@ -68,7 +68,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
                   : 0;
 
               return (
-                <div
+                <article
                   key={product.id}
                   className="group flex flex-col items-center p-5 gap-3 bg-[#242424] rounded-3xl shadow-md transform transition duration-500 hover:scale-105 lg:hover:scale-110"
                 >
@@ -93,13 +93,13 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
                   >
                     Proceed to payment
                   </button>
-                </div>
+                </article>
               );
             })}
           </div>
         </>
       )}
-    </>
+    </section>
   );
 };
 

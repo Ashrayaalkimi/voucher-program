@@ -4,11 +4,11 @@ type Props = {};
 
 const ShimmerPlanCards = (props: Props) => {
   return (
-    <div className="flex flex-col mx-4 gap-10 lg:grid lg:grid-flow-row lg:grid-cols-3 lg:gap-12 cursor-pointer">
+    <section className="flex flex-col mx-4 gap-10 lg:grid lg:grid-flow-row lg:grid-cols-3 lg:gap-12 cursor-pointer">
       {Array(6)
         .fill("")
         .map((_, index) => (
-          <div
+          <article
             key={index}
             className="group lg:w-80 flex flex-col items-center p-5 gap-6 bg-[#242424] rounded-3xl shadow-md transform transition duration-500 hover:scale-105 lg:hover:scale-110"
           >
@@ -22,9 +22,9 @@ const ShimmerPlanCards = (props: Props) => {
              ))} 
             </ul>
             <button className="text-black w-full h-10 text-base font-medium py-3 px-16 lg:px-16 bg-[#737575] rounded-lg"></button>
-          </div>
+          </article>
         ))}
-    </div>
+    </section>
   );
 };
 

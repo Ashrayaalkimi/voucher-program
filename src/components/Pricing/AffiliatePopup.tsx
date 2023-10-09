@@ -56,7 +56,7 @@ const AffiliatePopup = () => {
   return (
     <>
       {isVisible && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
+        <section className="fixed inset-0 flex items-center justify-center z-50 bg-[#242424] bg-opacity-50 m-4 lg:m-0">
           <div className="bg-[#131313] flex justify-center items-center gap-5 flex-wrap p-4 lg:p-12 flex-col text-center  text-white rounded-3xl lg:w-[516px]">
             <Image src={Logo} alt="Tag" className=" w-18 h-18" />
             <h2 className="text-4xl lg:text-5xl font-bold leading-[52px]">
@@ -90,7 +90,7 @@ const AffiliatePopup = () => {
               Close
             </button>
           </div>
-        </div>
+        </section>
       )}
     </>
   );

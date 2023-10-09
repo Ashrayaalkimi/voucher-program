@@ -150,7 +150,7 @@ const BillingDetails = () => {
     }
   };
   return (
-    <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 justify-center lg:pt-20 p-6">
+    <section className="flex flex-col lg:flex-row gap-10 lg:gap-20 justify-center lg:pt-20 p-6">
       <div className="flex flex-col gap-12">
         <Email setEmailId={setEmailId} />
         <PaymentMethod
@@ -184,7 +184,7 @@ const BillingDetails = () => {
         </div>
       </div>
       <div className="text-yellow text-xl font-bold">{showError}</div>
-    </div>
+    </section>
   );
 };
 

@@ -5,17 +5,10 @@ import PlanCard from "./PlanCard";
 import Banner from "./Banner";
 import ShimmerPlanCards from "./ShimmerPlanCards";
 import AffiliatePopup from "./AffiliatePopup";
+import { Product } from "@/interfaces/ClientInterfaces";
 
 type Props = {};
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  noOfAlerts: number;
-  basePrice: number;
-  currency: string;
-  status: boolean;
-}
+
 const PricingPage = (props: Props) => {
   const [selectedPlan, setSelectedPlan] = useState<Product | null>(null);
   const [showAffiliatePopup, setShowAffiliatePopup] = useState(false);

@@ -4,25 +4,13 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
+import { ProductDetail } from "@/interfaces/ClientInterfaces";
 
 type Props = {
   setTotalPrice: (price: number) => void;
   setNametoPass: (name: string) => void;
   setCurrencytoPass: (currency: string) => void;
 };
-
-interface ProductDetail {
-  id: number;
-  name: string;
-  description: string;
-  noOfAlerts: number;
-  basePrice: number;
-  discount: number;
-  discountedPrice: number;
-  totalPrice: number;
-  currency: string;
-  status: boolean;
-}
 
 const OrderDetails = ({
   setTotalPrice,

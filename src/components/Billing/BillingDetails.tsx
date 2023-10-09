@@ -22,7 +22,7 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ethereum = (window as any).ethereum;
@@ -134,7 +134,7 @@ const BillingDetails = () => {
 
         const ETH_AMOUNT = exchangeRates.ethereum_amount;
         const TETHER_AMOUNT = exchangeRates.tether_amount;
-        
+
         const recipientAddress = "0x9c4a1876aA0f4C4AdF251a0F7e9504caE565e0e0";
 
         if (selectedTokenType === "eth") {
@@ -184,9 +184,30 @@ const BillingDetails = () => {
             );
             console.log("usdt contract", usdtContract);
 
-            await usdtContract.methods
-              .transfer(recipientAddress, usdtAmountWei)
-              .send({ from: userAddress });
+            const transferTransactionObject = {
+              from: userAddress,
+              to: usdtContractAddress, 
+              data: usdtContract.methods
+                .transfer(recipientAddress, usdtAmountWei)
+                .encodeABI(),
+            };
+
+            // Send the transaction to transfer USDT
+            const response = await web3.eth.sendTransaction(
+              transferTransactionObject
+            );
+
+            // Get the transaction hash
+            const txHash = response.transactionHash;
+
+            router.push(
+              `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+            );
+
+            // await usdtContract.methods
+            //   .transfer(recipientAddress, usdtAmountWei)
+            //   .send({ from: userAddress });
+
             alert(`Payment of ${amountInUSDT} USDT sent successfully.`);
           } catch (error) {
             console.error("Error sending USDT:", error);
@@ -194,7 +215,7 @@ const BillingDetails = () => {
         }
       } catch (error) {
         console.error("Error processing payment:", error);
-        // router.push("https://voucher-project.netlify.app/payment-failure");
+        router.push("https://voucher-project.netlify.app/payment-failure");
       }
     }
   };

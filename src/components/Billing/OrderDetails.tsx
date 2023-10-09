@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Tag from "../../../public/tag.svg";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ProductDetail } from "@/types";
+import { getCouponId, getProductId } from "@/service";
 
 type Props = {
   setTotalPrice: (price: number) => void;
@@ -37,31 +36,49 @@ const OrderDetails = ({
   >(null);
 
   useEffect(() => {
-    if (getParams) {
-      setLoading(true);
-      fetch(
-        `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/product/get/${getParams}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setProductDetail(data);
-          setTotal(data.basePrice);
-          setName(data.name);
-          setCurrency(data.currency);
+    async function fetchData(){
+      if (getParams) {
+        setLoading(true);
+        await getProductId(getParams).then((response)=>{
+          setProductDetail(response);
+          console.log("ProductDetail response", response);
+          setTotal(response.basePrice);
+          setName(response.name);
+          setCurrency(response.currency);
           setLoading(false);
           setError(null);
           sessionStorage.setItem("productId", getParams);
-        })
-        .catch((error) => {
+        }).catch(()=>{
           setError("Error fetching product details");
           setLoading(false);
-        });
+        })
+        // fetch(
+        //   `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/product/get/${getParams}`
+        // )
+        //   .then((response) => {
+        //     if (!response.ok) {
+        //       throw new Error("Network response was not ok");
+        //     }
+        //     return response.json();
+        //   })
+        //   .then((data) => {
+            // setProductDetail(data);
+            // console.log("ProductDetail data", data);
+            // setTotal(data.basePrice);
+            // setName(data.name);
+            // setCurrency(data.currency);
+            // setLoading(false);
+            // setError(null);
+            // localStorage.setItem("productId", getParams);
+        //   })
+        //   .catch((error) => {
+            // setError("Error fetching product details");
+            // setLoading(false);
+        //   });
+      }
     }
+    fetchData()
+    
   }, [getParams]);
 
   useEffect(() => {
@@ -100,35 +117,32 @@ const OrderDetails = ({
     }
   };
 
-  const handleApplyCoupon = () => {
+  const handleApplyCoupon = async() => {
     if (!couponCode) {
       setError("Please enter a coupon code");
       return;
     }
 
     setError(null);
-
-    fetch(
-      `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/affiliate/get/${couponCode}/${getParams}`
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
+    await getCouponId(couponCode, getParams).then((response)=>{
+      console.log("coupon", response);
+        // Check if the product in the response matches the getParams
         if (
-          data.products &&
-          data.products.length > 0 &&
-          data.products[0].id === Number(getParams)
+          response.products &&
+          response.products.length > 0 &&
+          response.products[0].id === Number(getParams)
         ) {
-          setAppliedDiscount(data.products[0].discountedPrice);
-          setTotal(data.products[0].totalPrice);
-          setName(data.products[0].name);
-          setCurrency(data.products[0].currency);
+          setAppliedDiscount(response.products[0].discountedPrice);
+          setTotal(response.products[0].totalPrice);
+          setName(response.products[0].name);
+          setCurrency(response.products[0].currency);
+          console.log(
+            "Name and currency info",
+            response.products[0].name,
+            response.products[0].currency
+          );
           setCouponAppliedMessage(
-            `Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`
+            `Hurray!! You got ${response.products[0].discount}% off with ${couponCode} !`
           );
           sessionStorage.setItem("discountCode", couponCode);
         } else {
@@ -136,12 +150,53 @@ const OrderDetails = ({
           setAppliedDiscount(0);
           setTotal(productDetail.basePrice);
         }
-      })
-      .catch((error) => {
-        setError("Invalid affiliate code! Try another");
-        setAppliedDiscount(0);
-        setTotal(productDetail.basePrice);
-      });
+    }).catch(() => {
+      setError("Invalid affiliate code! Try another");
+      setAppliedDiscount(0);
+      setTotal(productDetail.basePrice);
+    });
+    // fetch(
+    //   `https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/affiliate/get/${couponCode}/${getParams}`
+    // )
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log("coupon", data);
+    //     // Check if the product in the response matches the getParams
+    //     if (
+    //       data.products &&
+    //       data.products.length > 0 &&
+    //       data.products[0].id === Number(getParams)
+    //     ) {
+    //       setAppliedDiscount(data.products[0].discountedPrice);
+    //       setTotal(data.products[0].totalPrice);
+    //       setName(data.products[0].name);
+    //       setCurrency(data.products[0].currency);
+    //       console.log(
+    //         "Name and currency info",
+    //         data.products[0].name,
+    //         data.products[0].currency
+    //       );
+    //       setCouponAppliedMessage(
+    //         `Hurray!! You got ${data.products[0].discount}% off with ${couponCode} !`
+    //       );
+    //       localStorage.setItem("discountCode", couponCode);
+    //       console.log("ProductDetail basePrice", productDetail.basePrice);
+    //     } else {
+    //       setError("This coupon code cannot be applied to this product");
+    //       setAppliedDiscount(0);
+    //       setTotal(productDetail.basePrice);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     setError("Invalid affiliate code! Try another");
+    //     setAppliedDiscount(0);
+    //     setTotal(productDetail.basePrice);
+    //   });
   };
 
   // setTotalPrice(total);
@@ -170,7 +225,7 @@ const OrderDetails = ({
         <h3 className="text-base font-medium">Discount Code</h3>
         <div className="relative flex">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Image src={Tag} alt="Tag" className=" w-4 h-4" />
+            <Image src="/icons/tag.svg" alt="Tag" width={20} height={20}/>
           </div>
           <input
             type="text"

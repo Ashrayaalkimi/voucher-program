@@ -9,25 +9,25 @@ export interface Product {
 }
 
 export interface CheckoutDetails {
-  name: string;
-  amount: number;
-  currency: string;
-  quantity: number;
-  mode: string;
-  success_url: string;
-  cancel_url: string;
-  email_id: string;
+  name: string,
+  amount: number,
+  currency: string,
+  quantity: number,
+  mode: string,
+  success_url: string,
+  cancel_url: string,
+  email_id: string,
 }
 
 export interface Voucher {
-  userEmail: string;
-  affiliateCode: string | null;
-  productId: string | null;
-  transactionId: string | number;
-  paymentStatus: string;
-  paymentMethod: string;
-  walletId: string;
-  currency: string;
+  userEmail: string,
+  affiliateCode: string|null,
+  productId: string|null,
+  transactionId: string|number,
+  paymentStatus: string,
+  paymentMethod: string,
+  walletId: string,
+  currency: string,
 }
 
 export interface ProductDetail {

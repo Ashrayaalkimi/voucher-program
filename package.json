@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev",    
+    "build:development": "cp .env.development .env.local && next build",
+    "build:production": "cp .env.production .env.local && next build",
+    "build:staging": "cp .env.staging .env.local && next build",
+    "build:qa": "cp .env.qa .env.local && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint"    
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^2.1.2",

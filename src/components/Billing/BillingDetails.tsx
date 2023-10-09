@@ -6,6 +6,9 @@ import Web3 from "web3";
 import OrderDetails from "./OrderDetails";
 import { useRouter } from "next/navigation";
 import contractABI from "./abi.json";
+import { checkOutSession, getCoinDetails } from "@/service";
+import { error } from "console";
+import { CheckoutDetails } from "@/types";
 
 const BillingDetails = () => {
   const router = useRouter();
@@ -22,10 +25,12 @@ const BillingDetails = () => {
   const [userAddress, setUserAddress] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null); // Initialize web3 as null
   const [showError, setShowError] = useState("");
+  const [storedDiscountCode, setStoredDiscountCode] = useState<string | null>("")
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ethereum = (window as any).ethereum;
+      setStoredDiscountCode(localStorage.getItem("discountCode"));
       if (ethereum) {
         const web3Instance = new Web3(ethereum);
         setWeb3(web3Instance);
@@ -89,38 +94,57 @@ const BillingDetails = () => {
         "Please enter your discount code to proceed with payment"
       );
     } else if (selectedPaymentMethod === "creditCard") {
-      try {
-        const response = await fetch(
-          "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/product-checkout-session/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: NametoPass,
-              amount: totalPrice,
-              currency: CurrencytoPass,
-              quantity: 1,
-              mode: "payment",
-              success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
-              // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
-              cancel_url: "https://voucher-project.netlify.app/payment-failure",
-              email_id: emailId,
-            }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch Stripe Checkout Session URL");
-        }
-        setEmailId(emailId);
-        const data = await response.json();
-        setSessionId(data.session_id);
-        sessionStorage.setItem("session_id", data.session_id);
-        window.location.href = data.url;
-      } catch (error) {
-        console.error("Error processing payment:", error);
+      let data : CheckoutDetails ={
+        name: NametoPass,
+        amount: totalPrice,
+        currency: CurrencytoPass,
+        quantity: 1,
+        mode: "payment",
+        success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
+        // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
+        cancel_url: "https://voucher-project.netlify.app/payment-failure",
+        email_id: emailId,
       }
+      await checkOutSession(data).then((response)=>{
+        setEmailId(emailId);
+        setSessionId(response.session_id);
+        sessionStorage.setItem("session_id", response.session_id);
+        window.location.href = response.url;
+      }).catch((error)=>{
+        console.error("Error processing payment:", error);
+      })
+      // try {
+      //   const response = await fetch(
+      //     "https://alkimi-payment-gateway-dev-xsm5l.ondigitalocean.app/payment/product-checkout-session/",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+        //     body: JSON.stringify({
+        //       name: NametoPass,
+        //       amount: totalPrice,
+        //       currency: CurrencytoPass,
+        //       quantity: 1,
+        //       mode: "payment",
+        //       success_url: `http://localhost:3000/payment-success?emailId=${emailId}`,
+        //       // `https://voucher-project.netlify.app/payment-success?emailId=${emailId}`,
+        //       cancel_url: "https://voucher-project.netlify.app/payment-failure",
+        //       email_id: emailId,
+        //     }),
+        //   }
+        // );
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch Stripe Checkout Session URL");
+      //   }
+      //   setEmailId(emailId);
+      //   const data = await response.json();
+      //   setSessionId(data.session_id);
+      //   localStorage.setItem("session_id", data.session_id);
+      //   window.location.href = data.url;
+      // } catch (error) {
+      //   console.error("Error processing payment:", error);
+      // }
     } else if (selectedPaymentMethod === "metamask") {
       try {
         const exchangeRates = await fetchExchangeRate();
@@ -166,7 +190,7 @@ const BillingDetails = () => {
           const txHash = response.transactionHash;
           router.push(
             // `https://voucher-project.netlify.app/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
-            `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+            `/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
           );
         } else if (selectedTokenType === "usdt") {
           try {
@@ -203,7 +227,7 @@ const BillingDetails = () => {
             const txHash = response.transactionHash;
 
             router.push(
-              `http://localhost:3000/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
+              `/payment-success-metamask?emailId=${emailId}&txHash=${txHash}`
             );
 
             // await usdtContract.methods
@@ -217,7 +241,7 @@ const BillingDetails = () => {
         }
       } catch (error) {
         console.error("Error processing payment:", error);
-        router.push("https://voucher-project.netlify.app/payment-failure");
+        router.push("/payment-failure");
       }
     }
   };

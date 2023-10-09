@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ShimmerPlanCards from "./ShimmerPlanCards";
 import { Product } from "@/types";
+import { getAllproduct } from "@/service";
 
 type PlanCardProps = {
   onSelectPlan: (product: Product) => void;
@@ -16,22 +17,21 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(
-      "https://voucher-dev-xffoq.ondigitalocean.app/voucher/api/v1/product/getall"
-    )
-      .then((response) => response.json())
-      .then((responseData) => {
-        setProducts(responseData);
+    async function fetchData (){
+      await getAllproduct().then((response)=>{
+        setProducts(response);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
-      });
+      })
+    }
+    fetchData()
   }, []);
-  const handleViewPlanbyId = (id: any) => {
-    const url = `/billing?productId=${id}`;
-    router.push(url);
+  
+  const handleViewPlanbyId = (id: number) => {
+    router.push(`/billing?productId=${id}`);
   };
 
   return (
@@ -60,7 +60,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
               </button>
             </div> */}
 
-            {products.map((product) => {
+            {products.map((product,index) => {
               const centPrice =
                 product.noOfAlerts !== 0
                   ? (product.basePrice / product.noOfAlerts).toFixed(2)
@@ -68,7 +68,7 @@ const PlanCard = ({ onSelectPlan }: PlanCardProps) => {
 
               return (
                 <article
-                  key={product.id}
+                  key={index}
                   className="group flex flex-col items-center p-5 gap-3 bg-[#242424] rounded-3xl shadow-md transform transition duration-500 hover:scale-105 lg:hover:scale-110"
                 >
                   <div className="bg-[#313131] rounded-[10px] group group-hover:bg-gradient-to-r group-hover:from-[#FADD62] group-hover:to-[#ff7337]">

@@ -16,7 +16,7 @@ const PricingPage = () => {
   }, []);
 
   const handleSelectPlan = (product: Product) => {
-    setSelectedPlan(product);
+    // setSelectedPlan(product);
   };
 
   return (

@@ -1,7 +1,7 @@
 import { CheckoutDetails, Voucher } from "@/types"
 
 export const getAllproduct = async()=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL + "product/getall")
+    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL + "voucher/api/v1/product/getall")
     if (!response.ok) {
         throw new Error("Something wrong on network connection");
     }
@@ -19,7 +19,7 @@ export const getCoinDetails = async() =>{
 }
 
 export const getCouponDetail =  async(coupone: string)=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+"affiliate/get/"+coupone)
+    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+"voucher/api/v1/affiliate/get/"+coupone)
     if (!response.ok) {
         throw new Error("Something wrong on network connection");
     }
@@ -28,7 +28,7 @@ export const getCouponDetail =  async(coupone: string)=>{
 }
 
 export const getProductId = async(productId:string)=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+`product/get/${productId}`)
+    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+`voucher/api/v1/product/get/${productId}`)
     if (!response.ok) {
         throw new Error("Something wrong on network connection");
     }
@@ -37,7 +37,7 @@ export const getProductId = async(productId:string)=>{
 }
 
 export const getCouponId = async(couponCode:string,productId:string|null)=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+`affiliate/get/${couponCode}/${productId}`)
+    let response = await fetch(process.env.NEXT_PUBLIC_VOUCHER_SERVER_URL+`voucher/api/v1/affiliate/get/${couponCode}/${productId}`)
     if (!response.ok) {
         throw new Error("Something wrong on network connection");
     }
@@ -46,7 +46,7 @@ export const getCouponId = async(couponCode:string,productId:string|null)=>{
 }
 
 export const checkOutSession =async(details:CheckoutDetails)=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL+"product-checkout-session/",{
+    let response = await fetch(process.env.NEXT_PUBLIC_ALKIMI_PAYMENT_SERVER_URL+"product-checkout-session/",{
         method:"POST",
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify(details)
@@ -59,7 +59,7 @@ export const checkOutSession =async(details:CheckoutDetails)=>{
 }
 
 export const getProductIntent =async(sessionId:string|null)=>{
-    let response = await fetch(process.env.NEXT_PUBLIC_ALKIMI_SERVER_URL+"get-product-intent/",{
+    let response = await fetch(process.env.NEXT_PUBLIC_ALKIMI_PAYMENT_SERVER_URL+"get-product-intent/",{
         method:"POST",
         headers: {'Content-Type':'application/json'},
         body:JSON.stringify({

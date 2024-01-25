@@ -27,3 +27,12 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+@layer components {
+  .button-container {
+    @apply flex inset-0 justify-center items-center fixed;
+  }
+
+  .custom-button {
+    @apply bg-gradient-to-br from-[#7F00FF] to-[#E100FF] p-5 px-7 rounded-[36px] text-lg font-medium;
+  }
+}
